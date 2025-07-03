@@ -1,2 +1,3 @@
 # reflectocat
-v
+A playful app for reflecting on your GitHub communication style.
+
