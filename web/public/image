@@ -1,0 +1,12 @@
+<img src="/logo.svg" alt="ReflectoCat Logo" />
+
+// With styling
+<img 
+  src="/logo.svg" 
+  alt="ReflectoCat Logo"
+  style={{
+    width: '100px',
+    height: '100px',
+    borderRadius: '50%'
+  }}
+/>

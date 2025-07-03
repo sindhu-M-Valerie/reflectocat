@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JavaScript Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Test Page</h1>
+    
+    <div class="test-box">
+        <h2>Test 1: Basic JavaScript</h2>
+        <p id="js-test">JavaScript is NOT working</p>
+        <script>
+            document.getElementById('js-test').innerHTML = '<span class="success">✅ JavaScript is working!</span>';
+            document.getElementById('js-test').style.fontSize = '18px';
+        </script>
+    </div>
+
+    <div class="test-box">
+        <h2>Test 2: Interactive JavaScript</h2>
+        <button onclick="testClick()">Click Me to Test</button>
+        <p id="click-result"></p>
+    </div>
+
+    <div class="test-box">
+        <h2>Test 3: Modern JavaScript (ES6)</h2>
+        <p id="es6-test">Testing ES6 features...</p>
+    </div>
+
+    <div class="test-box">
+        <h2>If JavaScript is Working:</h2>
+        <p>✅ You should see green checkmarks above</p>
+        <p>✅ The click button should respond</p>
+        <p>✅ Your React app should work fine</p>
+        
+        <h3>If JavaScript is NOT working:</h3>
+        <p class="error">❌ You'll see red error messages</p>
+        <p class="error">❌ Buttons won't respond</p>
+        <p class="error">❌ React app won't load</p>
+    </div>
+
+    <div class="test-box">
+        <h2>Back to Reflectocat</h2>
+        <p>If all tests pass, go back to: <a href="http://localhost:3000">http://localhost:3000</a></p>
+    </div>
+
+    <script>
+        // Test 2: Interactive function
+        function testClick() {
+            const result = document.getElementById('click-result');
+            result.innerHTML = '<span class="success">✅ Click event works! JavaScript is fully functional.</span>';
+            result.style.fontSize = '16px';
+        }
+
+        // Test 3: ES6 features
+        try {
+            const arrow = () => "ES6 arrow functions work";
+            const template = `Template literals work`;
+            const [a, b] = [1, 2]; // Destructuring
+            
+            document.getElementById('es6-test').innerHTML = 
+                '<span class="success">✅ Modern JavaScript (ES6+) is supported!</span>';
+        } catch (error) {
+            document.getElementById('es6-test').innerHTML = 
+                '<span class="error">❌ ES6 not supported - browser might be too old</span>';
+        }
+
+        // Console test
+        console.log("JavaScript is working! This message should appear in browser console (F12)");
+    </script>
+</body>
+</html>
