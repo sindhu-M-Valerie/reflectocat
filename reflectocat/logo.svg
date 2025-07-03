@@ -1,37 +1,38 @@
-<svg width="320" height="240" viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="340" height="240" viewBox="0 0 340 240" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Mirror frame -->
-  <ellipse cx="230" cy="120" rx="65" ry="80" fill="#E8EAF6" stroke="#A3B5CC" stroke-width="4"/>
-  <ellipse cx="250" cy="85" rx="15" ry="8" fill="#fff" opacity="0.20"/>
-  <!-- Mona's tail -->
-  <path d="M90 210 Q60 180 110 170 Q90 220 160 210" stroke="#23272E" stroke-width="7" fill="none"/>
-  <!-- Mona's body (back view) -->
-  <ellipse cx="120" cy="175" rx="37" ry="27" fill="#23272E"/>
-  <!-- Head (Mona, back view, slightly tilted) -->
-  <ellipse cx="120" cy="120" rx="33" ry="30" fill="#23272E"/>
+  <ellipse cx="245" cy="120" rx="65" ry="85" fill="#F4F7FB" stroke="#A3B5CC" stroke-width="4"/>
+  <!-- Mirror highlight -->
+  <ellipse cx="265" cy="90" rx="18" ry="10" fill="#fff" opacity="0.28"/>
+  <!-- Octocat tail (back view) -->
+  <path d="M110 220 Q70 185 125 175 Q100 230 180 215" stroke="#23272E" stroke-width="8" fill="none"/>
+  <!-- Octocat body (back view) -->
+  <ellipse cx="145" cy="180" rx="38" ry="28" fill="#23272E"/>
+  <!-- Octocat head (back view) -->
+  <ellipse cx="145" cy="115" rx="34" ry="32" fill="#23272E"/>
   <!-- Left ear -->
-  <polygon points="99,110 110,78 117,110" fill="#23272E"/>
+  <polygon points="123,110 132,80 142,112" fill="#23272E"/>
   <!-- Right ear -->
-  <polygon points="141,110 130,78 123,110" fill="#23272E"/>
-  <!-- Mona's left tentacle -->
-  <ellipse cx="99" cy="145" rx="8" ry="4" fill="#23272E" transform="rotate(-20 99 145)"/>
-  <!-- Mona's right tentacle -->
-  <ellipse cx="141" cy="145" rx="8" ry="4" fill="#23272E" transform="rotate(20 141 145)"/>
+  <polygon points="167,110 158,80 148,112" fill="#23272E"/>
+  <!-- Left tentacle -->
+  <ellipse cx="125" cy="145" rx="8" ry="4.5" fill="#23272E" transform="rotate(-16 125 145)"/>
+  <!-- Right tentacle -->
+  <ellipse cx="165" cy="145" rx="8" ry="4.5" fill="#23272E" transform="rotate(16 165 145)"/>
   <!-- Subtle face hint (back) -->
-  <ellipse cx="112" cy="128" rx="2" ry="4" fill="#444"/>
-  <ellipse cx="128" cy="128" rx="2" ry="4" fill="#444"/>
+  <ellipse cx="137" cy="126" rx="2" ry="5" fill="#444"/>
+  <ellipse cx="153" cy="126" rx="2" ry="5" fill="#444"/>
   <!-- Reflection Mona (front, simplified, light) -->
-  <ellipse cx="230" cy="90" rx="25" ry="22" fill="#fff" opacity="0.7"/>
+  <ellipse cx="245" cy="85" rx="25" ry="22" fill="#fff" opacity="0.78"/>
   <!-- Reflection ears -->
-  <polygon points="210,85 220,65 225,88" fill="#fff" opacity="0.7"/>
-  <polygon points="250,85 240,65 235,88" fill="#fff" opacity="0.7"/>
+  <polygon points="225,80 234,65 238,88" fill="#fff" opacity="0.7"/>
+  <polygon points="265,80 256,65 252,88" fill="#fff" opacity="0.7"/>
   <!-- Reflection tentacles -->
-  <ellipse cx="215" cy="112" rx="7" ry="3" fill="#fff" opacity="0.5" transform="rotate(-15 215 112)"/>
-  <ellipse cx="245" cy="112" rx="7" ry="3" fill="#fff" opacity="0.5" transform="rotate(15 245 112)"/>
+  <ellipse cx="230" cy="110" rx="8" ry="3.5" fill="#fff" opacity="0.55" transform="rotate(-10 230 110)"/>
+  <ellipse cx="260" cy="110" rx="8" ry="3.5" fill="#fff" opacity="0.55" transform="rotate(10 260 110)"/>
   <!-- Reflection face features -->
-  <ellipse cx="223" cy="97" rx="2" ry="3" fill="#A3B5CC" opacity="0.8"/>
-  <ellipse cx="237" cy="97" rx="2" ry="3" fill="#A3B5CC" opacity="0.8"/>
+  <ellipse cx="238" cy="93" rx="2" ry="3" fill="#A3B5CC" opacity="0.85"/>
+  <ellipse cx="252" cy="93" rx="2" ry="3" fill="#A3B5CC" opacity="0.85"/>
   <!-- Reflection mouth -->
-  <path d="M228 105 Q230 108 232 105" stroke="#A3B5CC" stroke-width="1.5" fill="none" opacity="0.8"/>
+  <path d="M243 102 Q245 106 248 102" stroke="#A3B5CC" stroke-width="1.6" fill="none" opacity="0.8"/>
   <!-- Ground shadow -->
-  <ellipse cx="160" cy="225" rx="95" ry="11" fill="#E8EAF6" opacity="0.7"/>
+  <ellipse cx="170" cy="228" rx="105" ry="13" fill="#E8EAF6" opacity="0.67"/>
 </svg>
