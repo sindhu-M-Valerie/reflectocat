@@ -1,12 +1,12 @@
-<img src="/logo.svg" alt="ReflectoCat Logo" />
+<img src="/image-1751584833621.png" alt="ReflectoCat Logo" />
 
 // With styling
 <img 
-  src="/logo.svg" 
+  src="/image-1751584833621.png" 
   alt="ReflectoCat Logo"
   style={{
-    width: '100px',
-    height: '100px',
+    width: '160px',
+    height: '160px',
     borderRadius: '50%'
   }}
 />

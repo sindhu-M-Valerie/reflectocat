@@ -726,14 +726,26 @@ function App() {
         <Title>
           <LogoContainer>
             <img 
-              src="/ReflectoCat.svg" 
+              src="/image-1751584833621.png" 
               alt="ReflectoCat Logo" 
               style={{
                 width: '160px',
                 height: '160px',
+                borderRadius: '50%',
                 filter: 'drop-shadow(0 0 20px rgba(79, 172, 254, 0.5))'
               }}
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'block';
+              }}
             />
+            <div style={{
+              display: 'none',
+              fontSize: '160px',
+              filter: 'drop-shadow(0 0 20px rgba(79, 172, 254, 0.5))'
+            }}>
+              🐱
+            </div>
           </LogoContainer>
           ReflectoCat
         </Title>
