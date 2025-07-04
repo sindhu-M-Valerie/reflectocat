@@ -1,0 +1,38 @@
+<svg width="340" height="240" viewBox="0 0 340 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Mirror frame -->
+  <ellipse cx="245" cy="120" rx="65" ry="85" fill="#F4F7FB" stroke="#A3B5CC" stroke-width="4"/>
+  <!-- Mirror highlight -->
+  <ellipse cx="265" cy="90" rx="18" ry="10" fill="#fff" opacity="0.28"/>
+  <!-- Octocat tail (back view) -->
+  <path d="M110 220 Q70 185 125 175 Q100 230 180 215" stroke="#23272E" stroke-width="8" fill="none"/>
+  <!-- Octocat body (back view) -->
+  <ellipse cx="145" cy="180" rx="38" ry="28" fill="#23272E"/>
+  <!-- Octocat head (back view) -->
+  <ellipse cx="145" cy="115" rx="34" ry="32" fill="#23272E"/>
+  <!-- Left ear -->
+  <polygon points="123,110 132,80 142,112" fill="#23272E"/>
+  <!-- Right ear -->
+  <polygon points="167,110 158,80 148,112" fill="#23272E"/>
+  <!-- Left tentacle -->
+  <ellipse cx="125" cy="145" rx="8" ry="4.5" fill="#23272E" transform="rotate(-16 125 145)"/>
+  <!-- Right tentacle -->
+  <ellipse cx="165" cy="145" rx="8" ry="4.5" fill="#23272E" transform="rotate(16 165 145)"/>
+  <!-- Subtle face hint (back) -->
+  <ellipse cx="137" cy="126" rx="2" ry="5" fill="#444"/>
+  <ellipse cx="153" cy="126" rx="2" ry="5" fill="#444"/>
+  <!-- Reflection Mona (front, simplified, light) -->
+  <ellipse cx="245" cy="85" rx="25" ry="22" fill="#fff" opacity="0.78"/>
+  <!-- Reflection ears -->
+  <polygon points="225,80 234,65 238,88" fill="#fff" opacity="0.7"/>
+  <polygon points="265,80 256,65 252,88" fill="#fff" opacity="0.7"/>
+  <!-- Reflection tentacles -->
+  <ellipse cx="230" cy="110" rx="8" ry="3.5" fill="#fff" opacity="0.55" transform="rotate(-10 230 110)"/>
+  <ellipse cx="260" cy="110" rx="8" ry="3.5" fill="#fff" opacity="0.55" transform="rotate(10 260 110)"/>
+  <!-- Reflection face features -->
+  <ellipse cx="238" cy="93" rx="2" ry="3" fill="#A3B5CC" opacity="0.85"/>
+  <ellipse cx="252" cy="93" rx="2" ry="3" fill="#A3B5CC" opacity="0.85"/>
+  <!-- Reflection mouth -->
+  <path d="M243 102 Q245 106 248 102" stroke="#A3B5CC" stroke-width="1.6" fill="none" opacity="0.8"/>
+  <!-- Ground shadow -->
+  <ellipse cx="170" cy="228" rx="105" ry="13" fill="#E8EAF6" opacity="0.67"/>
+</svg>
