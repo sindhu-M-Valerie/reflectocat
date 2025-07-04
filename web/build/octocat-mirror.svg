@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" preserveAspectRatio="xMidYMid meet">
+  <!-- Beige background -->
+  <rect width="500" height="300" fill="#f5f0e6" />
+  <defs>
+    <!-- Clip path for mirror reflection -->
+    <clipPath id="mirrorClip">
+      <ellipse cx="200" cy="140" rx="120" ry="150" />
+    </clipPath>
+  </defs>
+  <!-- Mirror frame -->
+  <ellipse cx="200" cy="140" rx="120" ry="150" fill="none" stroke="#333333" stroke-width="6" />
+  <!-- Octocat reflection inside mirror (flipped horizontally) -->
+  <image
+    xlink:href="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
+    width="180" height="180"
+    x="110" y="40"
+    clip-path="url(#mirrorClip)"
+    transform="translate(200,0) scale(-1,1) translate(-380,0)"
+  />
+  <!-- Octocat outside mirror -->
+  <image
+    xlink:href="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
+    width="180" height="180"
+    x="320" y="70"
+  />
+  <!-- Logo Text -->
+  <text
+    x="250" y="285"
+    text-anchor="middle"
+    font-family="Segoe UI, Tahoma, Geneva, Verdana, sans-serif"
+    font-size="36"
+    fill="#333333"
+  >ReflectoCat</text>
+</svg>
