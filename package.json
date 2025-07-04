@@ -5,10 +5,10 @@
   "description": "ReflectoCat - A GitHub profile and communication analyzer",
   "homepage": "https://sindhu-M-Valerie.github.io/reflectocat",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@github/spark": "^1.0.0",
