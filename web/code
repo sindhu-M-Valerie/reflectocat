@@ -1,0 +1,7 @@
+web/
+  public/
+    index.html
+  src/
+    index.js
+    App.js
+  package.json
