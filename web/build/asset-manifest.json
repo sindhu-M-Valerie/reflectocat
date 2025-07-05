@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/reflectocat/static/css/main.233b3b67.css",
-    "main.js": "/reflectocat/static/js/main.cbe4cb02.js",
+    "main.js": "/reflectocat/static/js/main.d7b582fa.js",
     "index.html": "/reflectocat/index.html",
     "main.233b3b67.css.map": "/reflectocat/static/css/main.233b3b67.css.map",
-    "main.cbe4cb02.js.map": "/reflectocat/static/js/main.cbe4cb02.js.map"
+    "main.d7b582fa.js.map": "/reflectocat/static/js/main.d7b582fa.js.map"
   },
   "entrypoints": [
     "static/css/main.233b3b67.css",
-    "static/js/main.cbe4cb02.js"
+    "static/js/main.d7b582fa.js"
   ]
 }
