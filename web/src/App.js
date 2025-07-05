@@ -726,7 +726,7 @@ function App() {
         <Title>
           <LogoContainer>
             <img 
-              src="Screenshot 2025-07-04 at 6.05.54 AM.png" 
+              src="/image-1751584833621.png" 
               alt="ReflectoCat Logo" 
               style={{
                 width: '160px',
