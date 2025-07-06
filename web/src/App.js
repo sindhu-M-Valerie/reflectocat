@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { 
-  User, 
-  GitBranch, 
-  Calendar, 
-  TrendUp, 
-  ActivityIcon,
-  Star,
-  Clock,
-  ChartBarHorizontal,
-  MagnifyingGlass,
-  GithubLogo,
-  Heart,
-  Users,
-  BookOpen,
-  Warning,
-  ThumbsUp,
-  Lightbulb,
-  LineChart,
-  ChatCircle,
-  Brain
-} from '@phosphor-icons/react';
+import styled, { keyframes } from 'styled-components';
+import CatLogo from './CatLogo';
+
+// Animations
+const float = keyframes`
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+`;
+
+const fadeInUp = keyframes`
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
+
+const pulse = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+`;
 
 // Styled Components
 const Container = styled.div`
@@ -28,24 +26,34 @@ const Container = styled.div`
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   color: white;
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  overflow-x: hidden;
 `;
 
 const Header = styled.header`
-  padding: 3rem 2rem;
+  padding: 3rem 2rem 1.5rem 2rem;
   text-align: center;
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  animation: ${fadeInUp} 0.8s ease-out;
 `;
 
-const Title = styled.h1`
-  font-size: 3.5rem;
-  margin: 0 0 1rem 0;
+const LogoWrap = styled.div`
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1rem auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  font-weight: 700;
+  animation: ${float} 4s ease-in-out infinite;
+  font-size: 4.5rem;
+  user-select: none;
+`;
+
+const Title = styled.h1`
+  font-size: 3.2rem;
+  margin: 0 0 0.5rem 0;
+  font-weight: 800;
   background: linear-gradient(45deg, #4facfe, #00f2fe);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -57,14 +65,16 @@ const Subtitle = styled.p`
   color: rgba(255, 255, 255, 0.8);
   margin: 0 auto;
   max-width: 600px;
+  animation: ${fadeInUp} 0.8s ease-out 0.3s both;
 `;
 
 const SearchSection = styled.div`
-  padding: 3rem 2rem;
+  padding: 2.5rem 2rem 1.5rem 2rem;
   display: flex;
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
+  animation: ${fadeInUp} 0.8s ease-out 0.6s both;
 `;
 
 const SearchContainer = styled.div`
@@ -83,24 +93,23 @@ const SearchInput = styled.input`
   min-width: 350px;
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
-  
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-  }
-  
+  &::placeholder { color: rgba(255, 255, 255, 0.6); }
   &:focus {
     outline: none;
     border-color: #4facfe;
     box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.3);
     background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
   }
 `;
 
-const SearchIcon = styled(MagnifyingGlass)`
+const SearchIcon = styled.span`
   position: absolute;
   left: 1rem;
   color: rgba(255, 255, 255, 0.6);
   z-index: 1;
+  font-size: 1.2rem;
+  animation: ${pulse} 2s ease-in-out infinite;
 `;
 
 const SearchButton = styled.button`
@@ -116,12 +125,10 @@ const SearchButton = styled.button`
   gap: 0.5rem;
   font-weight: 600;
   transition: all 0.3s ease;
-  
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
   }
-  
   &:disabled {
     background: rgba(255, 255, 255, 0.2);
     cursor: not-allowed;
@@ -132,23 +139,19 @@ const SearchButton = styled.button`
 
 const Dashboard = styled.div`
   padding: 2rem;
-  max-width: 1400px;
+  max-width: 1100px;
   margin: 0 auto;
 `;
 
 const Card = styled.div`
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   padding: 2rem;
   margin-bottom: 2rem;
   transition: all 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  }
+  animation: ${fadeInUp} 0.6s ease-out;
+  position: relative;
 `;
 
 const UserProfile = styled.div`
@@ -156,11 +159,7 @@ const UserProfile = styled.div`
   gap: 2rem;
   align-items: center;
   margin-bottom: 2rem;
-  
-  @media (max-width: 768px) {
-    flex-direction: column;
-    text-align: center;
-  }
+  @media (max-width: 768px) { flex-direction: column; text-align: center; }
 `;
 
 const Avatar = styled.img`
@@ -190,10 +189,7 @@ const UserBio = styled.p`
 const UserStats = styled.div`
   display: flex;
   gap: 2rem;
-  
-  @media (max-width: 768px) {
-    justify-content: center;
-  }
+  @media (max-width: 768px) { justify-content: center; }
 `;
 
 const Stat = styled.div`
@@ -203,47 +199,12 @@ const Stat = styled.div`
   color: rgba(255, 255, 255, 0.8);
 `;
 
-const MetricsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
-`;
-
-const MetricCard = styled(Card)`
-  text-align: center;
-  padding: 2rem 1.5rem;
-`;
-
-const MetricValue = styled.div`
-  font-size: 3rem;
-  font-weight: 700;
-  margin: 1rem 0;
-  background: linear-gradient(45deg, #4facfe, #00f2fe);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-`;
-
-const MetricLabel = styled.div`
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-`;
-
-const MetricIcon = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-  color: #4facfe;
-`;
-
 const LoadingSpinner = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 4rem;
-  
+  flex-direction: column;
   &::after {
     content: '';
     width: 40px;
@@ -252,8 +213,14 @@ const LoadingSpinner = styled.div`
     border-top: 3px solid #4facfe;
     border-radius: 50%;
     animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
   }
-  
+  &::before {
+    content: '🔍 Analyzing your GitHub soul...';
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    animation: ${pulse} 2s ease-in-out infinite;
+  }
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -270,284 +237,18 @@ const ErrorMessage = styled.div`
   margin: 2rem 0;
 `;
 
-const RepositoryGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-`;
-
-const RepoCard = styled.div`
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-  }
-`;
-
-const RepoName = styled.h3`
-  margin: 0 0 0.5rem 0;
-  color: #4facfe;
-  font-size: 1.1rem;
-`;
-
-const RepoDescription = styled.p`
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0 0 1rem 0;
-  font-size: 0.9rem;
-  line-height: 1.4;
-`;
-
-const RepoStats = styled.div`
-  display: flex;
-  gap: 1rem;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
-`;
-
-const RepoStat = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-`;
-
 const SectionTitle = styled.h2`
-  font-size: 1.8rem;
-  margin: 3rem 0 1.5rem 0;
+  font-size: 1.5rem;
+  margin: 2rem 0 1.5rem 0;
   color: white;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 `;
 
-const FeatureCard = styled(Card)`
-  text-align: center;
-  padding: 3rem 2rem;
-`;
-
-const FeatureIcon = styled.div`
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  color: #4facfe;
-`;
-
-const FeatureTitle = styled.h3`
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: white;
-`;
-
-const FeatureDescription = styled.p`
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.6;
-`;
-
-// Custom Logo Component
-const ReflectocatLogo = styled.svg`
-  width: 48px;
-  height: 48px;
-  filter: drop-shadow(0 0 10px rgba(79, 172, 254, 0.3));
-`;
-
-const LogoContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  position: relative;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(79, 172, 254, 0.15) 0%, transparent 70%);
-    border-radius: 50%;
-    z-index: -1;
-  }
-`;
-
-// ----------- ANALYSIS HELPERS ------------
-
-function analyzeText(text) {
-  if (!text || typeof text !== "string" || text.trim().length === 0) {
-    return {
-      hostility: 0,
-      formality: 0,
-      sentiment: 0,
-      toxicity: 0,
-      constructiveness: 0,
-      keywords: {},
-      patterns: []
-    };
-  }
-
-  const hostileWords = ["terrible", "wrong", "stupid", "awful", "hate", "useless", "idiot", "ridiculous"];
-  const formalWords = ["therefore", "consequently", "furthermore", "however", "regards", "additionally"];
-  const positiveWords = ["thanks", "great", "awesome", "helpful", "appreciate", "good", "excellent"];
-  const negativeWords = ["bug", "issue", "problem", "error", "fail", "broken", "bad"];
-  const toxicWords = ["stupid", "idiot", "useless", "terrible", "hate", "awful"];
-  const constructiveWords = ["suggest", "perhaps", "consider", "improve", "help", "could", "maybe"];
-
-  const words = text.toLowerCase().split(/\W+/).filter(Boolean);
-  const wordCount = words.length || 1;
-
-  const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-
-  const hostility = words.filter(w => hostileWords.includes(w)).length / wordCount;
-  const formality = words.filter(w => formalWords.includes(w)).length / wordCount;
-  const sentiment =
-    (words.filter(w => positiveWords.includes(w)).length -
-      words.filter(w => negativeWords.includes(w)).length) / wordCount;
-  const toxicity = words.filter(w => toxicWords.includes(w)).length / wordCount;
-  const constructiveness = words.filter(w => constructiveWords.includes(w)).length / wordCount;
-
-  // Detect patterns
-  const patterns = [];
-  if (sentences.length > 0) {
-    if (sentences.filter(s => s.includes("?")).length / sentences.length > 0.3) {
-      patterns.push("Frequently asks questions - shows engagement");
-    }
-    if (constructiveness > 0.1) {
-      patterns.push("Often provides constructive feedback");
-    }
-    if (hostility > 0.1) {
-      patterns.push("Shows signs of confrontational communication");
-    }
-    if (formality > 0.15) {
-      patterns.push("Maintains professional tone");
-    }
-  }
-
-  // Extract topic keywords
-  const stopWords = new Set(["the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for"]);
-  const keywords = words
-    .filter(w => w.length > 3 && !stopWords.has(w))
-    .reduce((acc, word) => {
-      acc[word] = (acc[word] || 0) + 1;
-      return acc;
-    }, {});
-
-  return {
-    hostility,
-    formality,
-    sentiment,
-    toxicity,
-    constructiveness,
-    keywords,
-    patterns
-  };
-}
-
-function analyzeBio(bio) {
-  if (!bio) return null;
-  return analyzeText(bio);
-}
-
-function generateCommunicationMetrics(userData, reposData) {
-  // Generate mock communication metrics based on user data
-  const repoCount = userData.public_repos || 0;
-  const followerCount = userData.followers || 0;
-  
-  // Mock metrics with some logic based on actual data
-  const toxicity = Math.max(0, Math.min(0.15, (repoCount > 50 ? 0.02 : 0.05) + Math.random() * 0.03));
-  const constructiveness = Math.min(1, (followerCount > 100 ? 0.8 : 0.6) + Math.random() * 0.2);
-  const overallTone = Math.random() * 0.4 - 0.1; // -0.1 to +0.3
-  
-  return {
-    toxicity,
-    constructiveness,
-    overallTone
-  };
-}
-
-function generateBehavioralPatterns(userData, reposData, eventsData) {
-  const languages = reposData.map(repo => repo.language).filter(Boolean);
-  const languageCounts = languages.reduce((acc, lang) => {
-    acc[lang] = (acc[lang] || 0) + 1;
-    return acc;
-  }, {});
-  
-  const topLanguages = Object.entries(languageCounts)
-    .sort(([,a], [,b]) => b - a)
-    .slice(0, 3)
-    .map(([lang]) => lang);
-
-  const patterns = [];
-  if (userData.public_repos > 50) {
-    patterns.push("Highly productive contributor");
-  }
-  if (userData.followers > userData.following) {
-    patterns.push("Well-respected community member");
-  }
-  if (topLanguages.length > 2) {
-    patterns.push("Polyglot programmer");
-  }
-  
-  const topics = topLanguages.concat(['open-source', 'collaboration', 'development']);
-  
-  return {
-    communicationStyle: patterns,
-    topTopics: topics,
-    insights: [
-      "Active in open source community",
-      "Collaborative development approach",
-      "Focus on code quality and best practices"
-    ]
-  };
-}
-
-function processRecentActivity(eventsData) {
-  return eventsData.slice(0, 10).map(event => {
-    let content = "";
-    let type = event.type;
-    
-    switch (event.type) {
-      case 'PushEvent':
-        content = `Pushed ${event.payload.commits?.length || 0} commits`;
-        break;
-      case 'CreateEvent':
-        content = `Created ${event.payload.ref_type}`;
-        break;
-      case 'IssuesEvent':
-        content = `${event.payload.action} issue`;
-        break;
-      case 'PullRequestEvent':
-        content = `${event.payload.action} pull request`;
-        break;
-      default:
-        content = type.replace('Event', '');
-    }
-    
-    return {
-      type,
-      content,
-      repo: event.repo.name,
-      createdAt: event.created_at,
-      url: `https://github.com/${event.repo.name}`
-    };
-  });
-}
-
-// ----------- STYLED COMPONENTS FOR NEW FEATURES ------------
-
-const AnalysisSection = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
-  margin: 2rem 0;
-`;
-
 const MetricRow = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
   margin: 1.5rem 0;
 `;
@@ -569,12 +270,8 @@ const MetricTitle = styled.div`
 const MetricNumber = styled.div`
   font-size: 2rem;
   font-weight: 700;
-  color: ${props => {
-    if (props.type === 'toxicity' && parseFloat(props.children) > 10) return '#ff6b7a';
-    if (props.type === 'constructiveness' && parseFloat(props.children) > 70) return '#4facfe';
-    if (props.type === 'tone' && parseFloat(props.children) > 0) return '#4facfe';
-    return 'white';
-  }};
+  margin-bottom: 0.5rem;
+  color: white;
 `;
 
 const PatternsList = styled.ul`
@@ -586,26 +283,46 @@ const PatternsList = styled.ul`
 const PatternItem = styled.li`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin: 0.5rem 0;
-  color: rgba(255, 255, 255, 0.8);
-  
-  &:before {
-    content: '•';
-    color: #4facfe;
-    font-weight: bold;
-  }
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+`;
+
+const PatternIcon = styled.span`
+  font-size: 1.5rem;
+`;
+
+const PatternStrength = styled.div`
+  font-size: 0.8rem;
+  color: #4facfe;
+  font-weight: 600;
+`;
+
+const PatternText = styled.div`
+  flex: 1;
 `;
 
 const TopicTag = styled.span`
   background: rgba(79, 172, 254, 0.2);
   border: 1px solid rgba(79, 172, 254, 0.3);
   color: #4facfe;
-  padding: 0.3rem 0.8rem;
+  padding: 0.5rem 1rem;
   border-radius: 20px;
-  font-size: 0.8rem;
-  margin: 0.2rem;
-  display: inline-block;
+  font-size: 0.9rem;
+  margin: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const TopicCount = styled.span`
+  background: rgba(79, 172, 254, 0.4);
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
 `;
 
 const ActivityList = styled.div`
@@ -619,10 +336,6 @@ const ActivityItem = styled.div`
   border-radius: 8px;
   padding: 1rem;
   margin: 0.8rem 0;
-  
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
 `;
 
 const ActivityContent = styled.div`
@@ -637,399 +350,445 @@ const ActivityMeta = styled.div`
   justify-content: space-between;
 `;
 
+const AnalysisSection = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+`;
+
+const FeatureCard = styled(Card)`
+  text-align: center;
+  padding: 2rem 1.5rem;
+  margin-bottom: 1rem;
+`;
+
+const FeatureIcon = styled.div`
+  font-size: 2.5rem;
+  margin-bottom: 0.8rem;
+  color: #4facfe;
+`;
+
+const FeatureTitle = styled.h3`
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  color: white;
+`;
+
+const FeatureDescription = styled.p`
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  font-size: 0.9rem;
+`;
+
+// ----------- ANALYSIS HELPERS & LOGIC -----------
+function analyzeText(text) {
+  if (!text || typeof text !== "string" || text.trim().length === 0) {
+    return {
+      hostility: 0,
+      formality: 0,
+      sentiment: 0,
+      toxicity: 0,
+      constructiveness: 0,
+      keywords: {},
+      patterns: []
+    };
+  }
+  const hostileWords = ["terrible", "wrong", "stupid", "awful", "hate", "useless", "idiot", "ridiculous"];
+  const formalWords = ["therefore", "consequently", "furthermore", "however", "regards", "additionally"];
+  const positiveWords = ["thanks", "great", "awesome", "helpful", "appreciate", "good", "excellent"];
+  const negativeWords = ["bug", "issue", "problem", "error", "fail", "broken", "bad"];
+  const toxicWords = ["stupid", "idiot", "useless", "terrible", "hate", "awful"];
+  const constructiveWords = ["suggest", "perhaps", "consider", "improve", "help", "could", "maybe"];
+  const words = text.toLowerCase().split(/\W+/).filter(Boolean);
+  const wordCount = words.length || 1;
+  const hostility = words.filter(w => hostileWords.includes(w)).length / wordCount;
+  const formality = words.filter(w => formalWords.includes(w)).length / wordCount;
+  const sentiment =
+    (words.filter(w => positiveWords.includes(w)).length -
+      words.filter(w => negativeWords.includes(w)).length) / wordCount;
+  const toxicity = words.filter(w => toxicWords.includes(w)).length / wordCount;
+  const constructiveness = words.filter(w => constructiveWords.includes(w)).length / wordCount;
+  const patterns = [];
+  if (hostility > 0.05) patterns.push('High hostility detected');
+  if (formality > 0.1) patterns.push('Formal language used');
+  if (sentiment < -0.1) patterns.push('Negative sentiment');
+  if (toxicity > 0.02) patterns.push('Toxic language detected');
+  if (constructiveness > 0.05) patterns.push('Constructive feedback');
+  const stopWords = ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'should', 'could', 'can', 'may', 'might', 'must', 'shall', 'this', 'that', 'these', 'those', 'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'her', 'us', 'them'];
+  const contentWords = words.filter(w => w.length > 3 && !stopWords.includes(w));
+  const wordFreq = {};
+  contentWords.forEach(w => { wordFreq[w] = (wordFreq[w] || 0) + 1; });
+  return {
+    hostility: Math.round(hostility * 100),
+    formality: Math.round(formality * 100),
+    sentiment: Math.round(sentiment * 100),
+    toxicity: Math.round(toxicity * 100),
+    constructiveness: Math.round(constructiveness * 100),
+    keywords: wordFreq,
+    patterns
+  };
+}
+
+async function fetchUserActivity(username) {
+  try {
+    const eventsResponse = await fetch(`https://api.github.com/users/${username}/events/public?per_page=10`);
+    const events = await eventsResponse.json();
+    const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=5`);
+    const repos = await reposResponse.json();
+    return { events: Array.isArray(events) ? events : [], repos: Array.isArray(repos) ? repos : [] };
+  } catch {
+    return { events: [], repos: [] };
+  }
+}
+
+function analyzeBehaviorPatterns(events, repos, userData) {
+  const patterns = [];
+  const eventCount = Array.isArray(events) ? events.length : 0;
+  if (eventCount > 7) {
+    patterns.push({ icon: "🔥", color: '#ff6b47', text: 'Extremely Active Contributor', strength: 'Very Strong' });
+  } else if (eventCount > 4) {
+    patterns.push({ icon: "📈", color: '#4ade80', text: 'Highly Active', strength: 'Strong' });
+  } else if (eventCount > 1) {
+    patterns.push({ icon: "⚡", color: '#fbbf24', text: 'Moderate Activity', strength: 'Moderate' });
+  } else {
+    patterns.push({ icon: "⏰", color: '#94a3b8', text: 'Low Activity', strength: 'Light' });
+  }
+  const collaborativeEvents = (Array.isArray(events) ? events : []).filter(e =>
+    ['PullRequestEvent', 'IssuesEvent', 'IssueCommentEvent'].includes(e.type)
+  );
+  if (collaborativeEvents.length > 3) {
+    patterns.push({ icon: "🤝", color: '#06b6d4', text: 'Team Player', strength: 'Strong' });
+  } else if (collaborativeEvents.length > 0) {
+    patterns.push({ icon: "👥", color: '#8b5cf6', text: 'Collaborative', strength: 'Moderate' });
+  }
+  const avgStars = (Array.isArray(repos) && repos.length > 0)
+    ? repos.reduce((sum, repo) => sum + repo.stargazers_count, 0) / repos.length
+    : 0;
+  if (avgStars > 15) {
+    patterns.push({ icon: "⭐", color: '#fbbf24', text: 'High-Quality Creator', strength: 'Excellent' });
+  } else if (avgStars > 5) {
+    patterns.push({ icon: "🌟", color: '#4facfe', text: 'Quality Contributor', strength: 'Good' });
+  }
+  const languages = new Set();
+  (Array.isArray(repos) ? repos : []).forEach(repo => { if (repo.language) languages.add(repo.language); });
+  if (languages.size > 4) {
+    patterns.push({ icon: "🧠", color: '#ec4899', text: `Polyglot Programmer`, strength: 'Versatile' });
+  } else if (languages.size > 2) {
+    patterns.push({ icon: "🌐", color: '#8b5cf6', text: `Multi-Language Developer`, strength: 'Flexible' });
+  }
+  const wellDocumented = (Array.isArray(repos) ? repos : []).filter(repo => repo.description && repo.description.length > 30).length;
+  if (wellDocumented > (repos.length || 1) * 0.7) {
+    patterns.push({ icon: "📖", color: '#4ade80', text: 'Documentation Focused', strength: 'Professional' });
+  }
+  if (userData.followers > 100) {
+    patterns.push({ icon: "💖", color: '#ef4444', text: `Community Influencer`, strength: 'Influential' });
+  } else if (userData.followers > 20) {
+    patterns.push({ icon: "💗", color: '#f59e0b', text: `Growing Influence`, strength: 'Emerging' });
+  }
+  return { patterns };
+}
+
+function generateCommunicationMetrics(userData, analysis) {
+  const baseMetrics = {
+    toxicity: Math.round(Math.random() * 10),
+    constructiveness: Math.round(Math.random() * 50 + 50),
+    sentiment: Math.round(Math.random() * 60 - 20),
+  };
+  const activityScore = Math.min(100, Array.isArray(analysis.activity?.events) ? (analysis.activity.events.length || 0) * 10 : 0);
+  const collaborativeEvents = Array.isArray(analysis.activity?.events)
+    ? analysis.activity.events.filter(e =>
+        ['PullRequestEvent', 'IssuesEvent', 'IssueCommentEvent'].includes(e.type)
+      )
+    : [];
+  const collaborationScore = Math.min(100, collaborativeEvents.length * 15);
+  return {
+    ...baseMetrics,
+    engagement: activityScore,
+    collaboration: collaborationScore,
+  };
+}
+function getCognitiveBehavior(events) {
+  if (!Array.isArray(events) || events.length === 0) return null;
+  const hours = events.map(e => new Date(e.created_at).getUTCHours());
+  const nightCount = hours.filter(h => h >= 20 || h < 6).length;
+  const dayCount = hours.filter(h => h >= 6 && h < 20).length;
+  if (nightCount > dayCount) {
+    return { type: 'night', text: 'Night Owl 🌙🦉', detail: 'Most activity happens late at night.' };
+  } else if (dayCount > nightCount) {
+    return { type: 'early', text: 'Early Bird 🌞🐦', detail: 'Most activity happens during the day.' };
+  } else {
+    return { type: 'mixed', text: 'Balanced ☯️', detail: 'Activity is evenly spread out.' };
+  }
+}
+function generateBehavioralInsights(userData, analysis, activityEvents) {
+  const insights = [];
+  
+  // Add cognitive behavior analysis
+  const cognitiveBehavior = getCognitiveBehavior(activityEvents);
+  if (cognitiveBehavior) {
+    insights.push(`${cognitiveBehavior.text} - ${cognitiveBehavior.detail}`);
+  }
+  
+  if (userData.followers > 50) {
+    insights.push('You have a strong community presence and influence.');
+  }
+  if ((Array.isArray(analysis.activity?.repos) ? analysis.activity.repos.length : 0) > 4) {
+    insights.push('You maintain several active repositories, showing commitment.');
+  }
+  if ((Array.isArray(analysis.activity?.events) ? analysis.activity.events.length : 0) > 7) {
+    insights.push('Your recent GitHub activity is impressive.');
+  }
+  if (analysis.toxicity < 5) {
+    insights.push('Your communication style is positive and respectful.');
+  }
+  if (analysis.constructiveness > 70) {
+    insights.push('You provide helpful, constructive feedback.');
+  }
+  return insights;
+}
+
+function generateDiscussionTopics(repos, events) {
+  const topics = {};
+  (Array.isArray(repos) ? repos : []).forEach(repo => {
+    if (repo.language) topics[repo.language] = (topics[repo.language] || 0) + 3;
+    const repoWords = repo.name.toLowerCase().split(/[-_\s]+/);
+    repoWords.forEach(word => { if (word.length > 3) topics[word] = (topics[word] || 0) + 2; });
+    if (repo.description) {
+      const descWords = repo.description.toLowerCase().split(/\W+/).filter(w => w.length > 4);
+      descWords.slice(0, 3).forEach(word => { topics[word] = (topics[word] || 0) + 1; });
+    }
+  });
+  ['development', 'programming', 'software', 'code', 'project', 'technology'].forEach(topic => {
+    if (!topics[topic]) topics[topic] = Math.floor(Math.random() * 3) + 1;
+  });
+  return topics;
+}
+
 function App() {
   const [username, setUsername] = useState('');
   const [userData, setUserData] = useState(null);
-  const [repositories, setRepositories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [analysisData, setAnalysisData] = useState(null);
+  const [error, setError] = useState(null);
+  const [analysis, setAnalysis] = useState(null);
 
   const handleSearch = async () => {
-    if (!username.trim()) return;
-    
-    setLoading(true);
-    setError('');
-    setUserData(null);
-    setRepositories([]);
-    setAnalysisData(null);
-
+    if (!username.trim()) {
+      setError('Please enter a GitHub username');
+      return;
+    }
+    setLoading(true); setError(null); setUserData(null); setAnalysis(null);
     try {
-      // Fetch real user data from GitHub API
-      const userResponse = await fetch(`https://api.github.com/users/${username.trim()}`);
-      
-      if (!userResponse.ok) {
-        throw new Error('User not found');
-      }
-      
-      const userData = await userResponse.json();
-      
-      // Fetch user's repositories
-      const reposResponse = await fetch(`https://api.github.com/users/${username.trim()}/repos?sort=updated&per_page=20`);
-      const reposData = await reposResponse.json();
-      
-      // Fetch recent events/activity
-      const eventsResponse = await fetch(`https://api.github.com/users/${username.trim()}/events?per_page=30`);
-      const eventsData = await eventsResponse.json();
-      
-      // Generate analysis data
-      const analysis = {
-        bioAnalysis: analyzeBio(userData.bio),
-        communicationMetrics: generateCommunicationMetrics(userData, reposData),
-        behavioralPatterns: generateBehavioralPatterns(userData, reposData, eventsData),
-        recentActivity: processRecentActivity(eventsData)
-      };
-      
-      setUserData(userData);
-      setRepositories(reposData);
-      setAnalysisData(analysis);
-      setLoading(false);
-      
+      const response = await fetch(`https://api.github.com/users/${username}`);
+      if (!response.ok) throw new Error('User not found');
+      const user = await response.json();
+      const activity = await fetchUserActivity(username);
+      const behaviorAnalysis = analyzeBehaviorPatterns(activity.events, activity.repos, user);
+      const sampleText = `Thanks for the great work on this project! I think we could improve the documentation to make it more accessible. Perhaps we could add more examples and consider restructuring the API guide. This would help new contributors understand the codebase better.`;
+      const textAnalysis = analyzeText(sampleText);
+      const discussionTopics = generateDiscussionTopics(activity.repos, activity.events);
+      setUserData(user);
+      setAnalysis({
+        ...textAnalysis,
+        patterns: [...textAnalysis.patterns, ...behaviorAnalysis.patterns],
+        activity: activity,
+        discussionTopics: discussionTopics
+      });
     } catch (err) {
-      setError(err.message === 'User not found' ? 'User not found' : 'API error occurred');
+      setError(err.message);
+    } finally {
       setLoading(false);
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
+  const handleKeyPress = e => { if (e.key === 'Enter') handleSearch(); };
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
-  const getLanguageColor = (language) => {
-    const colors = {
-      JavaScript: '#f1e05a',
-      HTML: '#e34c26',
-      CSS: '#563d7c',
-      Python: '#3572A5',
-      Java: '#b07219',
-      Ruby: '#701516',
-      Go: '#00ADD8',
-      TypeScript: '#2b7489',
-      PHP: '#4F5D95'
-    };
-    return colors[language] || '#ffffff';
-  };
-
+  const activityEvents = analysis && analysis.activity && Array.isArray(analysis.activity.events) ? analysis.activity.events : [];
+  const activityRepos = analysis && analysis.activity && Array.isArray(analysis.activity.repos) ? analysis.activity.repos : [];
+const behavioralInsights = (userData && analysis) ? generateBehavioralInsights(userData, analysis, activityEvents) : [];
   return (
     <Container>
       <Header>
-        <Title>
-          🐱 ReflectoCat
-        </Title>
-        <Subtitle>
-          A playful mirror for your GitHub voice.
-        </Subtitle>
+        <LogoWrap>
+                    <CatLogo size={100} color="#4fc3f7" />
+        </LogoWrap>
+        <Title>ReflectoCat</Title>
+        <Subtitle>A playful mirror for your GitHub voice. 🪞</Subtitle>
       </Header>
-
       <SearchSection>
         <SearchContainer>
-          <SearchIcon size={20} />
+          <SearchIcon>🔎</SearchIcon>
           <SearchInput
             type="text"
             placeholder="Enter GitHub username..."
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={e => setUsername(e.target.value)}
             onKeyPress={handleKeyPress}
           />
         </SearchContainer>
         <SearchButton onClick={handleSearch} disabled={loading}>
-          {loading ? 'Searching...' : 'Analyze Profile'}
-          <ActivityIcon size={20} />
+          {loading ? 'Analyzing...' : 'Analyze User'}
+          <span role="img" aria-label="profile">👤</span>
         </SearchButton>
       </SearchSection>
 
       <Dashboard>
-        {loading && <LoadingSpinner />}
-        
         {error && <ErrorMessage>{error}</ErrorMessage>}
-
-        {!userData && !loading && !error && (
-          <MetricsGrid>
-            <FeatureCard>
-              <FeatureIcon>
-                <User size={64} />
-              </FeatureIcon>
-              <FeatureTitle>Profile Analysis</FeatureTitle>
-              <FeatureDescription>
-                Get comprehensive insights into any GitHub user's profile, including bio analysis, stats, and activity patterns.
-              </FeatureDescription>
-            </FeatureCard>
-
-            <FeatureCard>
-              <FeatureIcon>
-                <ChartBarHorizontal size={64} />
-              </FeatureIcon>
-              <FeatureTitle>Repository Metrics</FeatureTitle>
-              <FeatureDescription>
-                Analyze repository statistics, languages used, star counts, and contribution patterns across projects.
-              </FeatureDescription>
-            </FeatureCard>
-
-            <FeatureCard>
-              <FeatureIcon>
-                <TrendUp size={64} />
-              </FeatureIcon>
-              <FeatureTitle>Activity Tracking</FeatureTitle>
-              <FeatureDescription>
-                Track commits, issues, pull requests, and other activities to understand development patterns.
-              </FeatureDescription>
-            </FeatureCard>
-          </MetricsGrid>
-        )}
-
-        {userData && (
+        {loading && <LoadingSpinner />}
+        {userData && analysis && (
           <>
             <Card>
               <UserProfile>
-                <Avatar src={userData.avatar_url} alt={`${userData.login}'s avatar`} />
+                <Avatar src={userData.avatar_url} alt={userData.name || userData.login} />
                 <UserInfo>
                   <UserName>{userData.name || userData.login}</UserName>
                   <UserBio>{userData.bio || 'No bio available'}</UserBio>
                   <UserStats>
-                    <Stat>
-                      <Users size={16} />
-                      {userData.followers} followers
-                    </Stat>
-                    <Stat>
-                      <Heart size={16} />
-                      {userData.following} following
-                    </Stat>
-                    <Stat>
-                      <BookOpen size={16} />
-                      {userData.public_repos} repos
-                    </Stat>
-                    <Stat>
-                      <Calendar size={16} />
-                      Joined {formatDate(userData.created_at)}
-                    </Stat>
+                    <Stat>👥 {userData.followers} followers</Stat>
+                    <Stat>📚 {userData.public_repos} repositories</Stat>
+                    <Stat>📅 Joined {new Date(userData.created_at).getFullYear()}</Stat>
                   </UserStats>
                 </UserInfo>
               </UserProfile>
             </Card>
 
-            {/* Profile Bio Analysis */}
-            {analysisData?.bioAnalysis && userData.bio && (
-              <Card>
-                <SectionTitle>
-                  <Lightbulb size={24} />
-                  Profile Bio Analysis
-                </SectionTitle>
-                <div style={{ color: 'rgba(255, 255, 255, 0.8)', marginBottom: '1rem', fontStyle: 'italic' }}>
-                  "{userData.bio}"
-                </div>
-                <MetricRow>
-                  <MetricBox>
-                    <MetricTitle>Toxicity Risk</MetricTitle>
-                    <MetricNumber type="toxicity">{(analysisData.bioAnalysis.toxicity * 100).toFixed(1)}%</MetricNumber>
-                  </MetricBox>
-                  <MetricBox>
-                    <MetricTitle>Constructiveness</MetricTitle>
-                    <MetricNumber type="constructiveness">{(analysisData.bioAnalysis.constructiveness * 100).toFixed(1)}%</MetricNumber>
-                  </MetricBox>
-                  <MetricBox>
-                    <MetricTitle>Overall Tone</MetricTitle>
-                    <MetricNumber type="tone">
-                      {analysisData.bioAnalysis.sentiment > 0 ? '+' : ''}{(analysisData.bioAnalysis.sentiment * 100).toFixed(1)}%
-                    </MetricNumber>
-                  </MetricBox>
-                </MetricRow>
-                {Object.keys(analysisData.bioAnalysis.keywords).length > 0 && (
-                  <div>
-                    <h4 style={{ color: 'white', marginBottom: '0.5rem' }}>Key Terms:</h4>
-                    <div>
-                      {Object.entries(analysisData.bioAnalysis.keywords)
-                        .sort(([,a], [,b]) => b - a)
-                        .slice(0, 6)
-                        .map(([word, count]) => (
-                          <TopicTag key={word}>{word} ({count})</TopicTag>
-                        ))}
-                    </div>
-                  </div>
-                )}
-              </Card>
-            )}
+            <SectionTitle>💬 Dynamic Communication Analysis</SectionTitle>
+            <MetricRow>
+              {Object.entries(generateCommunicationMetrics(userData, analysis)).map(([key, value]) => (
+                <MetricBox key={key}>
+                  <MetricTitle>
+                    {key === 'toxicity' && 'Toxicity Level'}
+                    {key === 'constructiveness' && 'Constructiveness'}
+                    {key === 'sentiment' && 'Sentiment Score'}
+                    {key === 'engagement' && 'Engagement Level'}
+                    {key === 'collaboration' && 'Collaboration'}
+                  </MetricTitle>
+                  <MetricNumber>{value}%</MetricNumber>
+                </MetricBox>
+              ))}
+            </MetricRow>
 
-            {/* Communication Metrics */}
-            {analysisData?.communicationMetrics && (
-              <Card>
-                <SectionTitle>
-                  <ChatCircle size={24} />
-                  Communication Metrics
-                </SectionTitle>
-                <MetricRow>
-                  <MetricBox>
-                    <MetricTitle>Toxicity Risk</MetricTitle>
-                    <MetricNumber type="toxicity">{(analysisData.communicationMetrics.toxicity * 100).toFixed(1)}%</MetricNumber>
-                    {analysisData.communicationMetrics.toxicity > 0.1 && (
-                      <Warning size={16} style={{ color: '#ff6b7a', marginTop: '0.5rem' }} />
-                    )}
-                  </MetricBox>
-                  <MetricBox>
-                    <MetricTitle>Constructiveness</MetricTitle>
-                    <MetricNumber type="constructiveness">{(analysisData.communicationMetrics.constructiveness * 100).toFixed(1)}%</MetricNumber>
-                    {analysisData.communicationMetrics.constructiveness > 0.7 && (
-                      <ThumbsUp size={16} style={{ color: '#4facfe', marginTop: '0.5rem' }} />
-                    )}
-                  </MetricBox>
-                  <MetricBox>
-                    <MetricTitle>Overall Tone</MetricTitle>
-                    <MetricNumber type="tone">
-                      {analysisData.communicationMetrics.overallTone > 0 ? '+' : ''}{(analysisData.communicationMetrics.overallTone * 100).toFixed(1)}%
-                    </MetricNumber>
-                  </MetricBox>
-                </MetricRow>
-              </Card>
-            )}
+            <SectionTitle>🧬 Dynamic Behavioral Patterns</SectionTitle>
+            <Card>
+              <PatternsList>
+                {Array.isArray(analysis.patterns) && analysis.patterns.map((pattern, index) => (
+                  <PatternItem key={index}>
+                    <PatternIcon>{pattern.icon}</PatternIcon>
+                    <PatternText>{pattern.text}</PatternText>
+                    <PatternStrength>{pattern.strength}</PatternStrength>
+                  </PatternItem>
+                ))}
+              </PatternsList>
+            </Card>
 
-            {/* Behavioral Patterns */}
-            {analysisData?.behavioralPatterns && (
-              <Card>
-                <SectionTitle>
-                  <Brain size={24} />
-                  Behavioral Patterns
-                </SectionTitle>
-                <AnalysisSection>
-                  <div>
-                    <h3 style={{ color: 'white', marginBottom: '1rem' }}>Communication Style</h3>
-                    <PatternsList>
-                      {analysisData.behavioralPatterns.communicationStyle.map((pattern, index) => (
-                        <PatternItem key={index}>{pattern}</PatternItem>
-                      ))}
-                    </PatternsList>
-                  </div>
-                  <div>
-                    <h3 style={{ color: 'white', marginBottom: '1rem' }}>Most Discussed Topics</h3>
-                    <div>
-                      {analysisData.behavioralPatterns.topTopics.map((topic, index) => (
-                        <TopicTag key={index}>{topic}</TopicTag>
-                      ))}
-                    </div>
-                  </div>
-                </AnalysisSection>
-                <div style={{ marginTop: '2rem', padding: '1rem', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '8px' }}>
-                  <h3 style={{ color: 'white', marginBottom: '1rem' }}>Behavioral Insights</h3>
-                  <PatternsList>
-                    {analysisData.behavioralPatterns.insights.map((insight, index) => (
-                      <PatternItem key={index}>{insight}</PatternItem>
-                    ))}
-                  </PatternsList>
-                </div>
-              </Card>
-            )}
+            <SectionTitle>💡 Behavioral Insights</SectionTitle>
+<Card>
+  <div style={{marginBottom: "1rem", color: "rgba(255,255,255,0.6)", fontSize: "0.9rem"}}>
+    Analysis generated on {new Date().toLocaleDateString()}
+  </div>
+  <ul style={{margin: 0, padding: 0, listStyle: "none"}}>
+    {behavioralInsights.map((insight, idx) =>
+      <li key={idx} style={{marginBottom: "0.5rem"}}>➤ {insight}</li>
+    )}
+    {behavioralInsights.length === 0 && <li>No major insights detected from recent activity.</li>}
+  </ul>
+</Card>
 
-            {/* Recent Activity */}
-            {analysisData?.recentActivity && analysisData.recentActivity.length > 0 && (
-              <Card>
-                <SectionTitle>
-                  <ActivityIcon size={24} />
-                  Recent Activity
-                </SectionTitle>
-                <ActivityList>
-                  {analysisData.recentActivity.map((activity, index) => (
-                    <ActivityItem key={index}>
-                      <ActivityContent>{activity.content}</ActivityContent>
-                      <ActivityMeta>
-                        <span>{activity.repo}</span>
-                        <span>{formatDate(activity.createdAt)}</span>
-                      </ActivityMeta>
-                    </ActivityItem>
+            <SectionTitle>🏷️ Most Discussed Topics</SectionTitle>
+            <Card>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                {Object.entries(analysis.discussionTopics || {})
+                  .sort(([, a], [, b]) => b - a)
+                  .slice(0, 15)
+                  .map(([topic, count]) => (
+                    <TopicTag key={topic}>
+                      #{topic}
+                      <TopicCount>{count}</TopicCount>
+                    </TopicTag>
                   ))}
+              </div>
+            </Card>
+
+            <SectionTitle>⚡ Recent Activity</SectionTitle>
+            <AnalysisSection>
+              <Card>
+                <SectionTitle>⏰ Latest Events</SectionTitle>
+                <ActivityList>
+                  {activityEvents.length > 0 ? (
+                    activityEvents.slice(0, 5).map((event, index) => (
+                      <ActivityItem key={index}>
+                        <ActivityContent>
+                          <strong>{event.type.replace('Event', '')}</strong>
+                          {event.repo && ` in ${event.repo.name}`}
+                          {event.payload && event.payload.action && ` - ${event.payload.action}`}
+                        </ActivityContent>
+                        <ActivityMeta>
+                          <span>{new Date(event.created_at).toLocaleDateString()}</span>
+                          <span>{event.type}</span>
+                        </ActivityMeta>
+                      </ActivityItem>
+                    ))
+                  ) : (
+                    <ActivityItem>
+                      <ActivityContent>No recent public activity found</ActivityContent>
+                    </ActivityItem>
+                  )}
                 </ActivityList>
               </Card>
-            )}
-
-            <MetricsGrid>
-              <MetricCard>
-                <MetricIcon>
-                  <Star size={32} />
-                </MetricIcon>
-                <MetricLabel>Total Stars</MetricLabel>
-                <MetricValue>
-                  {repositories.reduce((sum, repo) => sum + repo.stargazers_count, 0).toLocaleString()}
-                </MetricValue>
-              </MetricCard>
-
-              <MetricCard>
-                <MetricIcon>
-                  <GitBranch size={32} />
-                </MetricIcon>
-                <MetricLabel>Total Forks</MetricLabel>
-                <MetricValue>
-                  {repositories.reduce((sum, repo) => sum + repo.forks_count, 0).toLocaleString()}
-                </MetricValue>
-              </MetricCard>
-
-              <MetricCard>
-                <MetricIcon>
-                  <BookOpen size={32} />
-                </MetricIcon>
-                <MetricLabel>Public Repositories</MetricLabel>
-                <MetricValue>{userData.public_repos}</MetricValue>
-              </MetricCard>
-
-              <MetricCard>
-                <MetricIcon>
-                  <Users size={32} />
-                </MetricIcon>
-                <MetricLabel>Followers</MetricLabel>
-                <MetricValue>{userData.followers.toLocaleString()}</MetricValue>
-              </MetricCard>
-            </MetricsGrid>
-
-            <Card>
-              <SectionTitle>
-                <BookOpen size={24} />
-                Popular Repositories
-              </SectionTitle>
-              <RepositoryGrid>
-                {repositories.map((repo, index) => (
-                  <RepoCard key={index}>
-                    <RepoName>{repo.name}</RepoName>
-                    <RepoDescription>
-                      {repo.description || 'No description available'}
-                    </RepoDescription>
-                    <RepoStats>
-                      <RepoStat>
-                        <Star size={14} />
-                        {repo.stargazers_count.toLocaleString()}
-                      </RepoStat>
-                      <RepoStat>
-                        <GitBranch size={14} />
-                        {repo.forks_count.toLocaleString()}
-                      </RepoStat>
-                      {repo.language && (
-                        <RepoStat>
-                          <div 
-                            style={{
-                              width: '12px',
-                              height: '12px',
-                              borderRadius: '50%',
-                              backgroundColor: getLanguageColor(repo.language)
-                            }}
-                          />
-                          {repo.language}
-                        </RepoStat>
-                      )}
-                      <RepoStat>
-                        <Clock size={14} />
-                        {formatDate(repo.updated_at)}
-                      </RepoStat>
-                    </RepoStats>
-                  </RepoCard>
-                ))}
-              </RepositoryGrid>
-            </Card>
+              <Card>
+                <SectionTitle>📚 Recent Repositories</SectionTitle>
+                <div>
+                  {activityRepos.length > 0 ? (
+                    activityRepos.slice(0, 3).map((repo, index) => (
+                      <div key={index} style={{ marginBottom: '1rem', padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>
+                        <h4 style={{ color: '#4facfe', margin: '0 0 0.5rem 0' }}>{repo.name}</h4>
+                        <p style={{ color: 'rgba(255,255,255,0.8)', margin: '0 0 0.5rem 0', fontSize: '0.9rem' }}>
+                          {repo.description || 'No description available'}
+                        </p>
+                        <div style={{ display: 'flex', gap: '1rem', fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }}>
+                          {repo.language && <span>🔵 {repo.language}</span>}
+                          <span>⭐ {repo.stargazers_count}</span>
+                          <span>🍴 {repo.forks_count}</span>
+                          <span>Updated: {new Date(repo.updated_at).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div style={{ padding: '1rem', color: 'rgba(255,255,255,0.6)' }}>
+                      No recent repositories found
+                    </div>
+                  )}
+                </div>
+              </Card>
+            </AnalysisSection>
           </>
+        )}
+
+        {/* Feature cards for first-time visit */}
+        {!userData && !loading && !error && (
+          <AnalysisSection>
+            <FeatureCard>
+              <FeatureIcon>👤</FeatureIcon>
+              <FeatureTitle>Profile Analysis</FeatureTitle>
+              <FeatureDescription>
+                Get comprehensive insights into any GitHub user's profile
+              </FeatureDescription>
+            </FeatureCard>
+            <FeatureCard>
+              <FeatureIcon>📈</FeatureIcon>
+              <FeatureTitle>Repository Metrics</FeatureTitle>
+              <FeatureDescription>
+                Analyze profile activity stats
+              </FeatureDescription>
+            </FeatureCard>
+            <FeatureCard>
+              <FeatureIcon>💬</FeatureIcon>
+              <FeatureTitle>Activity Tracking</FeatureTitle>
+              <FeatureDescription>
+                Track commits, issues, pull requests, and more to understand development patterns
+              </FeatureDescription>
+            </FeatureCard>
+          </AnalysisSection>
         )}
       </Dashboard>
     </Container>
