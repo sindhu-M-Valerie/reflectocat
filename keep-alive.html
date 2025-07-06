@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🐱 ReflectoCat Keep-Alive</title>
-    <meta http-equiv="refresh" content="1200">
+    <meta http-equiv="refresh" content="1200"> <!-- Refresh every 20 minutes -->
     <style>
         body {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
@@ -26,21 +26,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            justify-content: center;
-        }
-        .logo {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            filter: drop-shadow(0 0 10px rgba(79, 172, 254, 0.3));
-            transition: transform 0.3s ease;
-            margin: 0 0.5rem;
-        }
-        .logo:hover {
-            transform: scale(1.1);
         }
         .status {
             font-size: 1.5rem;
@@ -88,11 +73,7 @@
     </style>
 </head>
 <body>
-    <h1>
-        🐱 
-        <img src="/reflectocat-github-logo.png" alt="ReflectoCat Logo" class="logo" onerror="this.style.display='none'">
-        ReflectoCat Keep-Alive
-    </h1>
+    <h1>🐱 ReflectoCat Keep-Alive</h1>
     
     <div class="status">
         <div class="pulse">✅ Keeping your Codespace active...</div>
@@ -134,22 +115,30 @@
             }
         }
         
+        // Update time every second
         updateTime();
         setInterval(updateTime, 1000);
+        
+        // Set last refresh time
         setLastRefresh();
         
+        // Log keep-alive activity
         console.log('🐱 ReflectoCat Keep-Alive page loaded at:', new Date().toLocaleString());
         
+        // Simple keep-alive ping every 10 minutes
         setInterval(() => {
             console.log('🐱 Keep-alive ping at:', new Date().toLocaleString());
+            
+            // Create a simple request to keep the connection active
             fetch(window.location.origin, { 
                 method: 'HEAD',
                 mode: 'no-cors'
             }).catch(() => {
                 console.log('Keep-alive ping completed');
             });
-        }, 10 * 60 * 1000);
+        }, 10 * 60 * 1000); // 10 minutes
         
+        // Show page loaded successfully
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🐱 Keep-alive page ready!');
         });
