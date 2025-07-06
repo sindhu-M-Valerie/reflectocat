@@ -613,7 +613,7 @@ const behavioralInsights = (userData && analysis) ? generateBehavioralInsights(u
                     <CatLogo size={100} color="#4fc3f7" />
         </LogoWrap>
         <Title>ReflectoCat</Title>
-        <Subtitle>A playful mirror for your GitHub voice. 🪞</Subtitle>
+        <Subtitle> 🪞 A playful mirror for your GitHub voice. 🪞</Subtitle>
       </Header>
       <SearchSection>
         <SearchContainer>
@@ -652,7 +652,7 @@ const behavioralInsights = (userData && analysis) ? generateBehavioralInsights(u
               </UserProfile>
             </Card>
 
-            <SectionTitle>💬 Dynamic Communication Analysis</SectionTitle>
+            <SectionTitle>💬 Communication Analysis 💬 </SectionTitle>
             <MetricRow>
               {Object.entries(generateCommunicationMetrics(userData, analysis)).map(([key, value]) => (
                 <MetricBox key={key}>
@@ -668,7 +668,7 @@ const behavioralInsights = (userData && analysis) ? generateBehavioralInsights(u
               ))}
             </MetricRow>
 
-            <SectionTitle>🧬 Dynamic Behavioral Patterns</SectionTitle>
+            <SectionTitle>🧬 Behavioral Patterns 🧬 </SectionTitle>
             <Card>
               <PatternsList>
                 {Array.isArray(analysis.patterns) && analysis.patterns.map((pattern, index) => (
@@ -796,3 +796,4 @@ const behavioralInsights = (userData && analysis) ? generateBehavioralInsights(u
 }
 
 export default App;
+
