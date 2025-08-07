@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/reflectocat/static/js/main.d54d95ca.js",
+    "main.js": "/reflectocat/static/js/main.cdb76944.js",
     "index.html": "/reflectocat/index.html",
-    "main.d54d95ca.js.map": "/reflectocat/static/js/main.d54d95ca.js.map"
+    "main.cdb76944.js.map": "/reflectocat/static/js/main.cdb76944.js.map"
   },
   "entrypoints": [
-    "static/js/main.d54d95ca.js"
+    "static/js/main.cdb76944.js"
   ]
 }
