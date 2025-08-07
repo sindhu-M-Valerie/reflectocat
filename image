@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐱 ReflectoCat Keep-Alive</title>
+    <meta http-equiv="refresh" content="1200">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            filter: drop-shadow(0 0 10px rgba(79, 172, 254, 0.3));
+            transition: transform 0.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.1);
+        }
+        .emoji {
+            font-size: 3rem;
+            display: inline-block;
+        }
+        .status {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .time {
+            font-size: 1.2rem;
+            color: #4facfe;
+        }
+        .links {
+            margin-top: 2rem;
+        }
+        .links a {
+            color: #4facfe;
+            text-decoration: none;
+            font-size: 1.1rem;
+            margin: 0 1rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid #4facfe;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .links a:hover {
+            background: #4facfe;
+            color: white;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .info {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 2rem;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        <span class="emoji">🐱</span>
+        <img src="https://github.com/user-attachments/assets/c550b4c6-f649-430a-9dc4-2aa1c3ce4104" alt="ReflectoCat Logo" class="logo" onerror="this.style.display='none'">
+        ReflectoCat Keep-Alive
+    </h1>
+    
+    <div class="status">
+        <div class="pulse">✅ Keeping your Codespace active...</div>
+        <div>This page refreshes every 20 minutes automatically</div>
+    </div>
+    
+    <div class="time">
+        Current time: <span id="time"></span>
+    </div>
+    
+    <div class="status">
+        Last refresh: <span id="lastRefresh"></span>
+    </div>
+    
+    <div class="links">
+        <a href="/" target="_blank">🚀 Open ReflectoCat App</a>
+        <a href="https://github.com/sindhu-M-Valerie/reflectocat" target="_blank">📁 GitHub Repository</a>
+    </div>
+    
+    <div class="info">
+        <p>This page helps keep your GitHub Codespace active by maintaining browser activity.</p>
+        <p>Keep this tab open while working to prevent your Codespace from hibernating.</p>
+    </div>
+    
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const timeElement = document.getElementById('time');
+            if (timeElement) {
+                timeElement.textContent = now.toLocaleString();
+            }
+        }
+        
+        function setLastRefresh() {
+            const now = new Date();
+            const refreshElement = document.getElementById('lastRefresh');
+            if (refreshElement) {
+                refreshElement.textContent = now.toLocaleString();
+            }
+        }
+        
+        updateTime();
+        setInterval(updateTime, 1000);
+        setLastRefresh();
+        
+        console.log('🐱 ReflectoCat Keep-Alive page loaded at:', new Date().toLocaleString());
+        
+        setInterval(() => {
+            console.log('🐱 Keep-alive ping at:', new Date().toLocaleString());
+            fetch(window.location.origin, { 
+                method: 'HEAD',
+                mode: 'no-cors'
+            }).catch(() => {
+                console.log('Keep-alive ping completed');
+            });
+        }, 10 * 60 * 1000);
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🐱 Keep-alive page ready!');
+        });
+        
+        // Replace the existing generateBehavioralPatterns function with this enhanced version:
+
+        function generateBehavioralPatterns(userData, reposData, eventsData) {
+          // Analyze programming languages
+          const languages = reposData.map(repo => repo.language).filter(Boolean);
+          const languageCounts = languages.reduce((acc, lang) => {
+            acc[lang] = (acc[lang] || 0) + 1;
+            return acc;
+          }, {});
+          
+          const topLanguages = Object.entries(languageCounts)
+            .sort(([,a], [,b]) => b - a)
+            .slice(0, 3)
+            .map(([lang]) => lang);
+        
+          // DYNAMIC BEHAVIORAL INSIGHTS - Replace hardcoded patterns
+          const insights = generateDynamicInsights(userData, reposData, eventsData);
+          
+          // Communication style analysis
+          const patterns = [];
+          if (userData.public_repos > 50) {
+            patterns.push("Highly productive contributor");
+          }
+          if (userData.followers > userData.following) {
+            patterns.push("Well-respected community member");
+          }
+          if (topLanguages.length > 2) {
+            patterns.push("Polyglot programmer");
+          }
+          
+          const topics = topLanguages.concat(['open-source', 'collaboration', 'development']);
+          
+          return {
+            communicationStyle: patterns,
+            topTopics: topics,
+            insights: insights // Now dynamic instead of hardcoded!
+          };
+        }
+        
+        // NEW FUNCTION: Generate dynamic insights from actual user data
+        function generateDynamicInsights(userData, reposData, eventsData) {
+          const insights = [];
+          
+          // 1. REPOSITORY ANALYSIS
+          const totalStars = reposData.reduce((sum, repo) => sum + repo.stargazers_count, 0);
+          const totalForks = reposData.reduce((sum, repo) => sum + repo.forks_count, 0);
+          const forkedRepos = reposData.filter(repo => repo.fork).length;
+          const originalRepos = reposData.filter(repo => !repo.fork).length;
+          const reposWithDescriptions = reposData.filter(repo => repo.description && repo.description.trim()).length;
+          
+          // 2. ACTIVITY ANALYSIS
+          const recentEvents = eventsData.slice(0, 30);
+          const eventTypes = recentEvents.reduce((acc, event) => {
+            acc[event.type] = (acc[event.type] || 0) + 1;
+            return acc;
+          }, {});
+          
+          const pushEvents = eventTypes.PushEvent || 0;
+          const prEvents = eventTypes.PullRequestEvent || 0;
+          const issueEvents = eventTypes.IssuesEvent || 0;
+          const createEvents = eventTypes.CreateEvent || 0;
+          const watchEvents = eventTypes.WatchEvent || 0;
+          
+          // 3. GENERATE INSIGHTS BASED ON ACTUAL DATA
+          
+          // Collaboration patterns
+          if (prEvents > pushEvents * 0.3) {
+            insights.push("Actively engages in collaborative development through pull requests");
+          }
+          if (issueEvents > 5) {
+            insights.push("Participates actively in issue discussions and problem-solving");
+          }
+          if (forkedRepos > originalRepos * 0.5) {
+            insights.push("Contributes to existing projects and open source initiatives");
+          }
+          
+          // Code quality indicators
+          if (reposWithDescriptions / reposData.length > 0.7) {
+            insights.push("Maintains well-documented repositories with clear descriptions");
+          }
+          if (totalStars > userData.public_repos * 2) {
+            insights.push("Creates repositories that attract community interest and engagement");
+          }
+          
+          // Activity patterns
+          if (pushEvents > 20) {
+            insights.push("Demonstrates consistent coding activity and regular contributions");
+          }
+          if (createEvents > 5) {
+            insights.push("Frequently initiates new projects and repositories");
+          }
+          if (watchEvents > 10) {
+            insights.push("Stays engaged with the community by following interesting projects");
+          }
+          
+          // Account maturity and influence
+          const accountAgeYears = (new Date() - new Date(userData.created_at)) / (1000 * 60 * 60 * 24 * 365);
+          if (accountAgeYears > 3) {
+            insights.push("Established GitHub presence with long-term commitment to development");
+          }
+          if (userData.followers > userData.public_repos) {
+            insights.push("Has built a following that exceeds their repository count");
+          }
+          
+          // Language diversity
+          const uniqueLanguages = new Set(reposData.map(repo => repo.language).filter(Boolean)).size;
+          if (uniqueLanguages > 5) {
+            insights.push("Demonstrates versatility across multiple programming languages");
+          }
+          
+          // Productivity indicators
+          const avgStarsPerRepo = totalStars / Math.max(originalRepos, 1);
+          if (avgStarsPerRepo > 3) {
+            insights.push("Consistently produces high-quality code that receives community recognition");
+          }
+          
+          // Fallback insights if no specific patterns detected
+          if (insights.length === 0) {
+            insights.push("Building their GitHub presence through consistent development work");
+            insights.push("Focuses on personal projects and skill development");
+            insights.push("Emerging developer establishing their coding practices");
+          }
+          
+          // Limit to 3-5 most relevant insights
+          return insights.slice(0, 5);
+        }
+        
+        // ENHANCED: Also update processRecentActivity to provide richer data
+        function processRecentActivity(eventsData) {
+          return eventsData.slice(0, 10).map(event => {
+            let content = "";
+            let type = event.type;
+            let impact = "low";
+            
+            switch (event.type) {
+              case 'PushEvent':
+                const commitCount = event.payload.commits?.length || 0;
+                content = `Pushed ${commitCount} commit${commitCount !== 1 ? 's' : ''}`;
+                impact = commitCount > 3 ? "high" : "medium";
+                break;
+              case 'CreateEvent':
+                content = `Created ${event.payload.ref_type}: ${event.payload.ref || 'new project'}`;
+                impact = event.payload.ref_type === 'repository' ? "high" : "medium";
+                break;
+              case 'IssuesEvent':
+                content = `${event.payload.action} issue: ${event.payload.issue?.title?.substring(0, 50) || 'Issue discussion'}`;
+                impact = event.payload.action === 'opened' ? "medium" : "low";
+                break;
+              case 'PullRequestEvent':
+                content = `${event.payload.action} pull request: ${event.payload.pull_request?.title?.substring(0, 50) || 'Code contribution'}`;
+                impact = "high";
+                break;
+              case 'WatchEvent':
+                content = `Started watching ${event.repo.name}`;
+                impact = "low";
+                break;
+              case 'ForkEvent':
+                content = `Forked ${event.repo.name}`;
+                impact = "medium";
+                break;
+              default:
+                content = type.replace('Event', '').toLowerCase();
+                impact = "low";
+            }
+            
+            return {
+              type,
+              content,
+              repo: event.repo.name,
+              createdAt: event.created_at,
+              url: `https://github.com/${event.repo.name}`,
+              impact: impact
+            };
+          });
+        }
+    </script>
+</body>
+</html>
