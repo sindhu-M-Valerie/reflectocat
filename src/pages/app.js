@@ -388,7 +388,7 @@ const StatValue = styled.span`
   font-size: 0.7rem;
 `;
 
-const LastActivitySection = styled.div`
+const RecentActivitySection = styled.div`
   background: rgba(13, 17, 23, 0.8);
   border: 1px solid #30363d;
   border-radius: 8px;
@@ -396,7 +396,7 @@ const LastActivitySection = styled.div`
   margin-bottom: 1.5rem;
 `;
 
-const LastActivityTitle = styled.h4`
+const RecentActivityTitle = styled.h4`
   font-size: 0.9rem;
   color: #58a6ff;
   margin-bottom: 0.8rem;
@@ -406,68 +406,40 @@ const LastActivityTitle = styled.h4`
   font-weight: 600;
 `;
 
-const LastActivityItem = styled.div`
+const RecentActivityItem = styled.a`
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  padding: 0.8rem;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem;
   background: rgba(33, 38, 45, 0.5);
   border-radius: 6px;
-  border-left: 3px solid ${props => props.eventColor || '#58a6ff'};
-`;
-
-const ActivityHeader = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-`;
-
-const ActivityType = styled.span`
-  background: #58a6ff;
-  color: #0d1117;
-  padding: 0.15rem 0.3rem;
-  border-radius: 3px;
-  font-size: 0.6rem;
-  font-weight: 600;
-  margin-right: 0.4rem;
-`;
-
-const ActivityRepo = styled.span`
-  color: #58a6ff;
-  font-weight: 600;
-  font-size: 0.75rem;
-`;
-
-const ActivityTime = styled.span`
-  color: #7d8590;
-  font-size: 0.65rem;
-  font-style: italic;
-`;
-
-const ActivityDetails = styled.div`
+  text-decoration: none;
   color: #e6edf3;
-  font-size: 0.75rem;
-  line-height: 1.3;
+  margin-bottom: 0.4rem;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: rgba(88, 166, 255, 0.1);
+    border-color: #58a6ff;
+    transform: translateX(2px);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 
-const MainContent = styled.div`
+const ActivityIcon = styled.span`
+  font-size: 0.8rem;
+  width: 16px;
+  text-align: center;
+`;
+
+const ActivityText = styled.span`
+  font-size: 0.75rem;
+  font-weight: 500;
   flex: 1;
-`;
-
-const SectionContainer = styled.div`
-  margin-bottom: 1.5rem;
-`;
-
-const SectionTitle = styled.h3`
-  font-size: 1.1rem;
-  color: #e6edf3;
-  margin-bottom: 0.6rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border-bottom: 1px solid #30363d;
-  padding-bottom: 0.3rem;
 `;
 
 const AnalysisGrid = styled.div`
@@ -1104,44 +1076,6 @@ const App = () => {
     return patterns;
   };
 
-  const formatRelativeTime = (dateString) => {
-    const now = new Date();
-    const eventDate = new Date(dateString);
-    const diffInDays = Math.floor((now - eventDate) / (1000 * 60 * 60 * 24));
-
-    if (diffInDays < 30) {
-      return `${diffInDays} days ago`;
-    } else {
-      return new Date(dateString).toLocaleDateString();
-    }
-  };
-
-  const getEventColor = (eventType) => {
-    const colorMap = {
-      'PushEvent': '#2ea043',
-      'CreateEvent': '#58a6ff',
-      'DeleteEvent': '#f85149',
-      'IssuesEvent': '#fb8500',
-      'PullRequestEvent': '#a855f7'
-    };
-    return colorMap[eventType] || '#58a6ff';
-  };
-
-  const getDetailedActivityDescription = (event) => {
-    switch (event.type) {
-      case 'PushEvent':
-        const commits = event.payload.commits || [];
-        if (commits.length > 0) {
-          return `Latest commit: "${commits[0].message.split('\n')[0]}"`;
-        }
-        return `Pushed ${commits.length} commits`;
-      case 'CreateEvent':
-        return `Created ${event.payload.ref_type}`;
-      default:
-        return event.type.replace('Event', '');
-    }
-  };
-
   const analyzeProfile = async () => {
     if (!username.trim()) {
       setError('Please enter a GitHub username');
@@ -1203,6 +1137,46 @@ const App = () => {
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       analyzeProfile();
+    }
+  };
+
+  const getActivityUrl = (event) => {
+    const repoUrl = `https://github.com/${event.repo?.name}`;
+    
+    switch (event.type) {
+      case 'PushEvent':
+        // Link to the commits page
+        return `${repoUrl}/commits`;
+      case 'CreateEvent':
+        if (event.payload.ref_type === 'repository') {
+          return repoUrl;
+        } else if (event.payload.ref_type === 'branch') {
+          return `${repoUrl}/tree/${event.payload.ref}`;
+        } else if (event.payload.ref_type === 'tag') {
+          return `${repoUrl}/releases/tag/${event.payload.ref}`;
+        }
+        return repoUrl;
+      case 'DeleteEvent':
+        return repoUrl;
+      case 'IssuesEvent':
+        if (event.payload.issue) {
+          return event.payload.issue.html_url;
+        }
+        return `${repoUrl}/issues`;
+      case 'PullRequestEvent':
+        if (event.payload.pull_request) {
+          return event.payload.pull_request.html_url;
+        }
+        return `${repoUrl}/pulls`;
+      case 'WatchEvent':
+        return repoUrl;
+      case 'ForkEvent':
+        if (event.payload.forkee) {
+          return event.payload.forkee.html_url;
+        }
+        return repoUrl;
+      default:
+        return repoUrl;
     }
   };
 
@@ -1342,22 +1316,6 @@ const App = () => {
                   </LiveStatsItem>
                 </LiveUserStats>
 
-                {userData.events.length > 0 && (
-                  <LastActivitySection>
-                    <LastActivityTitle>⚡ Last Activity</LastActivityTitle>
-                    <LastActivityItem eventColor={getEventColor(userData.events[0].type)}>
-                      <ActivityHeader>
-                        <ActivityType>{userData.events[0].type.replace('Event', '')}</ActivityType>
-                        <ActivityRepo>{userData.events[0].repo?.name}</ActivityRepo>
-                        <ActivityTime>{formatRelativeTime(userData.events[0].created_at)}</ActivityTime>
-                      </ActivityHeader>
-                      <ActivityDetails>
-                        {getDetailedActivityDescription(userData.events[0])}
-                      </ActivityDetails>
-                    </LastActivityItem>
-                  </LastActivitySection>
-                )}
-
                 {/* Profile Links Section */}
                 <ProfileLinksSection>
                   <ProfileLinksTitle>👤 Profile Links</ProfileLinksTitle>
@@ -1422,13 +1380,13 @@ const App = () => {
                 )}
 
                 {/* Recent Activity Section */}
-                {userData.events.length > 1 && (
+                {userData.events.length > 0 && (
                   <RecentActivitySection>
                     <RecentActivityTitle>🕐 Recent Activity</RecentActivityTitle>
-                    {userData.events.slice(1, 4).map((event, index) => (
+                    {userData.events.slice(0, 4).map((event, index) => (
                       <RecentActivityItem 
                         key={index}
-                        href={`https://github.com/${event.repo?.name}`}
+                        href={getActivityUrl(event)}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -1805,60 +1763,26 @@ const TopRepoStars = styled.span`
   flex-shrink: 0;
 `;
 
-const RecentActivitySection = styled.div`
-  background: rgba(13, 17, 23, 0.8);
-  border: 1px solid #30363d;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-`;
-
-const RecentActivityTitle = styled.h4`
-  font-size: 0.9rem;
-  color: #58a6ff;
-  margin-bottom: 0.8rem;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-weight: 600;
-`;
-
-const RecentActivityItem = styled.a`
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.6rem;
-  background: rgba(33, 38, 45, 0.5);
-  border-radius: 6px;
-  text-decoration: none;
-  color: #e6edf3;
-  margin-bottom: 0.4rem;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
-
-  &:hover {
-    background: rgba(88, 166, 255, 0.1);
-    border-color: #58a6ff;
-    transform: translateX(2px);
-  }
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-const ActivityIcon = styled.span`
-  font-size: 0.8rem;
-  width: 16px;
-  text-align: center;
-`;
-
-const ActivityText = styled.span`
-  font-size: 0.75rem;
-  font-weight: 500;
+const MainContent = styled.div`
   flex: 1;
 `;
 
+const SectionContainer = styled.div`
+  margin-bottom: 1.5rem;
+`;
+
+const SectionTitle = styled.h3`
+  font-size: 1.1rem;
+  color: #e6edf3;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #30363d;
+  padding-bottom: 0.3rem;
+`;
+
+// Topics section styled components
 const TopicsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
