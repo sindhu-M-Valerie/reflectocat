@@ -334,7 +334,7 @@ const Dashboard = styled.div`
 `;
 
 const SideContent = styled.div`
-  width: 280px;
+  width: 240px;
  
   @media (max-width: 768px) {
     width: 100%;
@@ -345,30 +345,30 @@ const LiveUserStats = styled.div`
   background: rgba(13, 17, 23, 0.8);
   border: 1px solid #30363d;
   border-radius: 6px;
-  padding: 1rem;
+  padding: 0.8rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   position: static;
 `;
 
 const LiveStatsTitle = styled.h4`
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: #58a6ff;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.6rem;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.3rem;
   font-weight: 600;
 `;
 
 const LiveStatsItem = styled.div`
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: #e6edf3;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.4rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.4rem 0;
+  padding: 0.3rem 0;
   border-bottom: 1px solid rgba(48, 54, 61, 0.5);
  
   &:last-child {
@@ -379,38 +379,38 @@ const LiveStatsItem = styled.div`
 
 const StatLabel = styled.span`
   color: #7d8590;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
 `;
 
 const StatValue = styled.span`
   font-weight: 600;
   color: #58a6ff;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
 `;
 
 const LastActivitySection = styled.div`
   background: rgba(13, 17, 23, 0.8);
   border: 1px solid #30363d;
   border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
 `;
 
 const LastActivityTitle = styled.h4`
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   color: #58a6ff;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   font-weight: 600;
 `;
 
 const LastActivityItem = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem;
+  gap: 0.4rem;
+  padding: 0.8rem;
   background: rgba(33, 38, 45, 0.5);
   border-radius: 6px;
   border-left: 3px solid ${props => props.eventColor || '#58a6ff'};
@@ -426,29 +426,29 @@ const ActivityHeader = styled.div`
 const ActivityType = styled.span`
   background: #58a6ff;
   color: #0d1117;
-  padding: 0.2rem 0.4rem;
+  padding: 0.15rem 0.3rem;
   border-radius: 3px;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-weight: 600;
-  margin-right: 0.5rem;
+  margin-right: 0.4rem;
 `;
 
 const ActivityRepo = styled.span`
   color: #58a6ff;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 `;
 
 const ActivityTime = styled.span`
   color: #7d8590;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-style: italic;
 `;
 
 const ActivityDetails = styled.div`
   color: #e6edf3;
-  font-size: 0.85rem;
-  line-height: 1.4;
+  font-size: 0.75rem;
+  line-height: 1.3;
 `;
 
 const MainContent = styled.div`
@@ -1024,6 +1024,7 @@ const App = () => {
 
   const analyzeMostDiscussedTopics = (repos) => {
     const topicCount = {};
+    const topicRepos = {};
     
     repos.forEach(repo => {
       const text = `${repo.name} ${repo.description || ''}`.toLowerCase();
@@ -1032,6 +1033,16 @@ const App = () => {
       words.forEach(word => {
         if (word.length > 3) {
           topicCount[word] = (topicCount[word] || 0) + 1;
+          if (!topicRepos[word]) {
+            topicRepos[word] = [];
+          }
+          if (!topicRepos[word].find(r => r.name === repo.name)) {
+            topicRepos[word].push({
+              name: repo.name,
+              html_url: repo.html_url,
+              description: repo.description || ''
+            });
+          }
         }
       });
     });
@@ -1039,7 +1050,11 @@ const App = () => {
     return Object.entries(topicCount)
       .sort(([,a], [,b]) => b - a)
       .slice(0, 6)
-      .map(([topic, count]) => ({ topic, count }));
+      .map(([topic, count]) => ({ 
+        topic, 
+        count, 
+        repos: topicRepos[topic].slice(0, 3) // Show up to 3 repos per topic
+      }));
   };
 
   const generateBehavioralPatterns = (user, repos, events) => {
@@ -1342,6 +1357,89 @@ const App = () => {
                     </LastActivityItem>
                   </LastActivitySection>
                 )}
+
+                {/* Profile Links Section */}
+                <ProfileLinksSection>
+                  <ProfileLinksTitle>👤 Profile Links</ProfileLinksTitle>
+                  <ProfileLinkItem 
+                    href={`https://github.com/${userData.user.login}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ProfileLinkIcon>🔗</ProfileLinkIcon>
+                    <ProfileLinkText>View Full Profile</ProfileLinkText>
+                  </ProfileLinkItem>
+                  <ProfileLinkItem 
+                    href={`https://github.com/${userData.user.login}?tab=repositories`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ProfileLinkIcon>📚</ProfileLinkIcon>
+                    <ProfileLinkText>All Repositories</ProfileLinkText>
+                  </ProfileLinkItem>
+                  <ProfileLinkItem 
+                    href={`https://github.com/${userData.user.login}?tab=activity`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ProfileLinkIcon>⚡</ProfileLinkIcon>
+                    <ProfileLinkText>Activity Overview</ProfileLinkText>
+                  </ProfileLinkItem>
+                  <ProfileLinkItem 
+                    href={`https://github.com/${userData.user.login}?tab=followers`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ProfileLinkIcon>👥</ProfileLinkIcon>
+                    <ProfileLinkText>Followers</ProfileLinkText>
+                  </ProfileLinkItem>
+                </ProfileLinksSection>
+
+                {/* Top Repositories Section */}
+                {userData.repos.length > 0 && (
+                  <TopRepositoriesSection>
+                    <TopRepositoriesTitle>⭐ Top Repositories</TopRepositoriesTitle>
+                    {userData.repos
+                      .sort((a, b) => b.stargazers_count - a.stargazers_count)
+                      .slice(0, 5)
+                      .map((repo, index) => (
+                        <TopRepoItem 
+                          key={index}
+                          href={repo.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <TopRepoInfo>
+                            <TopRepoIcon>🔗</TopRepoIcon>
+                            <TopRepoName>{repo.name}</TopRepoName>
+                          </TopRepoInfo>
+                          <TopRepoStars>
+                            ({repo.stargazers_count} ⭐)
+                          </TopRepoStars>
+                        </TopRepoItem>
+                      ))}
+                  </TopRepositoriesSection>
+                )}
+
+                {/* Recent Activity Section */}
+                {userData.events.length > 1 && (
+                  <RecentActivitySection>
+                    <RecentActivityTitle>🕐 Recent Activity</RecentActivityTitle>
+                    {userData.events.slice(1, 4).map((event, index) => (
+                      <RecentActivityItem 
+                        key={index}
+                        href={`https://github.com/${event.repo?.name}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ActivityIcon>🔗</ActivityIcon>
+                        <ActivityText>
+                          {event.type.replace('Event', '')} in {event.repo?.name}
+                        </ActivityText>
+                      </RecentActivityItem>
+                    ))}
+                  </RecentActivitySection>
+                )}
               </SideContent>
 
               <MainContent>
@@ -1462,15 +1560,29 @@ const App = () => {
                 <SectionContainer>
                   <SectionTitle>💬 Most Discussed Topics</SectionTitle>
                   <CulturalInsightsContainer>
-                    <AnalysisGrid>
+                    <TopicsGrid>
                       {userData.analysis.topics.map((topic, index) => (
-                        <MetricCard key={index} color="#58a6ff">
-                          <MetricTitle>#{topic.topic}</MetricTitle>
-                          <MetricValue>{topic.count}</MetricValue>
-                          <MetricDescription>mentions across projects</MetricDescription>
-                        </MetricCard>
+                        <TopicCard key={index}>
+                          <TopicTitle>#{topic.topic}</TopicTitle>
+                          <TopicValue>{topic.count}</TopicValue>
+                          <TopicDescription>mentions across {topic.repos.length} project{topic.repos.length !== 1 ? 's' : ''}</TopicDescription>
+                          <TopicReposList>
+                            {topic.repos.map((repo, repoIndex) => (
+                              <TopicRepoLink 
+                                key={repoIndex}
+                                href={repo.html_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={repo.description}
+                              >
+                                <RepoLinkIcon>🔗</RepoLinkIcon>
+                                {repo.name}
+                              </TopicRepoLink>
+                            ))}
+                          </TopicReposList>
+                        </TopicCard>
                       ))}
-                    </AnalysisGrid>
+                    </TopicsGrid>
                   </CulturalInsightsContainer>
                 </SectionContainer>
                 
@@ -1563,5 +1675,265 @@ const InsightTitle = styled.h4`
 
 const InsightIcon = styled.span`
   font-size: 1rem;
+  opacity: 0.8;
+`;
+
+const ProfileLinksSection = styled.div`
+  background: rgba(13, 17, 23, 0.8);
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+`;
+
+const ProfileLinksTitle = styled.h4`
+  font-size: 0.9rem;
+  color: #58a6ff;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+`;
+
+const ProfileLinkItem = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem;
+  background: rgba(33, 38, 45, 0.5);
+  border-radius: 6px;
+  text-decoration: none;
+  color: #e6edf3;
+  margin-bottom: 0.4rem;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: rgba(88, 166, 255, 0.1);
+    border-color: #58a6ff;
+    transform: translateX(2px);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const ProfileLinkIcon = styled.span`
+  font-size: 0.8rem;
+  width: 16px;
+  text-align: center;
+`;
+
+const ProfileLinkText = styled.span`
+  font-size: 0.75rem;
+  font-weight: 500;
+`;
+
+const TopRepositoriesSection = styled.div`
+  background: rgba(13, 17, 23, 0.8);
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+`;
+
+const TopRepositoriesTitle = styled.h4`
+  font-size: 0.9rem;
+  color: #58a6ff;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+`;
+
+const TopRepoItem = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0.6rem;
+  background: rgba(33, 38, 45, 0.5);
+  border-radius: 6px;
+  text-decoration: none;
+  color: #e6edf3;
+  margin-bottom: 0.4rem;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: rgba(88, 166, 255, 0.1);
+    border-color: #58a6ff;
+    transform: translateX(2px);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const TopRepoInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+`;
+
+const TopRepoIcon = styled.span`
+  font-size: 0.8rem;
+  color: #58a6ff;
+`;
+
+const TopRepoName = styled.span`
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #58a6ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const TopRepoStars = styled.span`
+  font-size: 0.7rem;
+  color: #7d8590;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex-shrink: 0;
+`;
+
+const RecentActivitySection = styled.div`
+  background: rgba(13, 17, 23, 0.8);
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+`;
+
+const RecentActivityTitle = styled.h4`
+  font-size: 0.9rem;
+  color: #58a6ff;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+`;
+
+const RecentActivityItem = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem;
+  background: rgba(33, 38, 45, 0.5);
+  border-radius: 6px;
+  text-decoration: none;
+  color: #e6edf3;
+  margin-bottom: 0.4rem;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: rgba(88, 166, 255, 0.1);
+    border-color: #58a6ff;
+    transform: translateX(2px);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const ActivityIcon = styled.span`
+  font-size: 0.8rem;
+  width: 16px;
+  text-align: center;
+`;
+
+const ActivityText = styled.span`
+  font-size: 0.75rem;
+  font-weight: 500;
+  flex: 1;
+`;
+
+const TopicsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+`;
+
+const TopicCard = styled.div`
+  background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #30363d;
+  border-left: 3px solid #58a6ff;
+  transition: all 0.2s ease;
+ 
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    border-left-color: #58a6ff;
+    background: linear-gradient(135deg, #1c2128 0%, #161b22 100%);
+  }
+`;
+
+const TopicTitle = styled.h3`
+  font-size: 0.75rem;
+  color: #58a6ff;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 600;
+`;
+
+const TopicValue = styled.div`
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #58a6ff;
+  margin-bottom: 0.3rem;
+`;
+
+const TopicDescription = styled.p`
+  color: #7d8590;
+  font-size: 0.65rem;
+  line-height: 1.3;
+  margin-bottom: 0.5rem;
+`;
+
+const TopicReposList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+`;
+
+const TopicRepoLink = styled.a`
+  color: #58a6ff;
+  font-size: 0.65rem;
+  text-decoration: none;
+  padding: 0.2rem 0;
+  border-bottom: 1px solid rgba(48, 54, 61, 0.3);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+
+  &:hover {
+    color: #79c0ff;
+    transform: translateX(2px);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const RepoLinkIcon = styled.span`
+  font-size: 0.6rem;
   opacity: 0.8;
 `;
