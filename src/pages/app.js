@@ -1937,7 +1937,7 @@ const WikiNewsSection = styled.section`
 
 const WikiNewsTitle = styled.h3`
   font-size: 1rem;
-  color: #58a6ff;  cd /workspaces/reflectocat/web
+  color: #58a6ff;
   margin-bottom: 0.8rem;
   display: flex;
   align-items: center;
