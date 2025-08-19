@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/reflectocat/static/js/main.6a41e189.js",
+    "index.html": "/reflectocat/index.html",
+    "main.6a41e189.js.map": "/reflectocat/static/js/main.6a41e189.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.6a41e189.js"
+  ]
+}
