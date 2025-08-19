@@ -1099,6 +1099,11 @@ const App = () => {
       const eventsResponse = await fetch(`https://api.github.com/users/${username}/events?per_page=50`);
       const events = await eventsResponse.json();
 
+      const [wikipediaResults, newsResults] = await Promise.all([
+        searchWikipedia(username, user.name),
+        searchNews(username, user.name)
+      ]);
+
       const culturalInsights = analyzeCulturalPatterns(user, repos, events);
       const behavioralPatterns = generateBehavioralPatterns(user, repos, events);
       const mostDiscussedTopics = analyzeMostDiscussedTopics(repos);
@@ -1123,10 +1128,19 @@ const App = () => {
         cultural: culturalInsights,
         patterns: behavioralPatterns,
         topics: mostDiscussedTopics,
-        sentiment: sentimentAnalysis
+        sentiment: sentimentAnalysis,
+        wikipediaResults,
+        newsResults
       };
 
-      setUserData({ user, repos, events, analysis });
+      setUserData({ 
+        user, 
+        repos, 
+        events, 
+        analysis, 
+        wikipediaResults, 
+        newsResults 
+      });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -1281,6 +1295,52 @@ const App = () => {
                 </ProfileStatItem>
               </ProfileStats>
             </ProfileHeader>
+
+            {/* Wikipedia & News Section */}
+            {(userData.wikipediaResults?.length > 0 || userData.newsResults?.length > 0) && (
+              <WikiNewsSection>
+                <WikiNewsTitle>📰 External References</WikiNewsTitle>
+                <WikiNewsGrid>
+                  <WikiNewsColumn>
+                    <WikiNewsColumnTitle>📚 Wikipedia</WikiNewsColumnTitle>
+                    {userData.wikipediaResults?.length > 0 ? (
+                      userData.wikipediaResults.map((article, index) => (
+                        <WikiNewsItem 
+                          key={index}
+                          href={article.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <WikiNewsItemTitle>{article.title}</WikiNewsItemTitle>
+                          <WikiNewsItemSnippet>{article.snippet}</WikiNewsItemSnippet>
+                        </WikiNewsItem>
+                      ))
+                    ) : (
+                      <NoResultsMessage>No Wikipedia page found</NoResultsMessage>
+                    )}
+                  </WikiNewsColumn>
+                  
+                  <WikiNewsColumn>
+                    <WikiNewsColumnTitle>🗞️ Recent News</WikiNewsColumnTitle>
+                    {userData.newsResults?.length > 0 ? (
+                      userData.newsResults.map((article, index) => (
+                        <WikiNewsItem 
+                          key={index}
+                          href={article.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <WikiNewsItemTitle>{article.title}</WikiNewsItemTitle>
+                          <WikiNewsItemSnippet>{article.snippet}</WikiNewsItemSnippet>
+                        </WikiNewsItem>
+                      ))
+                    ) : (
+                      <NoResultsMessage>No recent news found</NoResultsMessage>
+                    )}
+                  </WikiNewsColumn>
+                </WikiNewsGrid>
+              </WikiNewsSection>
+            )}
 
             <Dashboard>
               <SideContent>
@@ -1861,3 +1921,143 @@ const RepoLinkIcon = styled.span`
   font-size: 0.6rem;
   opacity: 0.8;
 `;
+
+// Wikipedia & News Section styled components
+const WikiNewsSection = styled.section`
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto 2rem;
+  background: rgba(33, 38, 45, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+`;
+
+const WikiNewsTitle = styled.h3`
+  font-size: 1rem;
+  color: #58a6ff;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const WikiNewsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const WikiNewsColumn = styled.div``;
+
+const WikiNewsColumnTitle = styled.h4`
+  font-size: 0.85rem;
+  color: #e6edf3;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid #30363d;
+`;
+
+const WikiNewsItem = styled.a`
+  display: block;
+  display: block;
+  background: rgba(13, 17, 23, 0.6);
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 0.8rem;
+  margin-bottom: 0.6rem;
+  text-decoration: none;
+  color: #e6edf3;
+  transition: all 0.2s ease;
+  border-left: 3px solid #58a6ff;
+  
+  &:hover {
+    background: rgba(88, 166, 255, 0.1);
+    transform: translateY(-1px);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const WikiNewsItemTitle = styled.h5`
+  font-size: 0.8rem;
+  color: #58a6ff;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+`;
+
+const WikiNewsItemSnippet = styled.p`
+  font-size: 0.7rem;
+  color: #c9d1d9;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
+
+const NoResultsMessage = styled.div`
+  color: #7d8590;
+  font-style: italic;
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 1rem;
+`;
+
+// Add these search functions before the App component (around line 800)
+const searchWikipedia = async (username, realName) => {
+  try {
+    // Try exact match first with real name, then username
+    const searchTerms = [realName, username].filter(Boolean);
+    
+    for (const term of searchTerms) {
+      if (!term) continue;
+      
+      try {
+        const response = await fetch(
+          `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(term)}&limit=1&namespace=0&format=json&origin=*`
+        );
+        
+        if (response.ok) {
+          const data = await response.json();
+          const [, titles, snippets, urls] = data;
+          
+          if (titles[0] && urls[0]) {
+            return [{
+              title: titles[0],
+              snippet: snippets[0] || 'Wikipedia page found',
+              url: urls[0]
+            }];
+          }
+        }
+      } catch (error) {
+        console.warn(`Wikipedia search failed for: ${term}`);
+      }
+    }
+    
+    return [];
+  } catch (error) {
+    console.error('Wikipedia search error:', error);
+    return [];
+  }
+};
+
+const searchNews = async (username, realName) => {
+  try {
+    // Since we can't access real news APIs without keys, return empty array
+    // In a real implementation, you'd use Google News API, NewsAPI, etc.
+    return [];
+  // eslint-disable-next-line no-unreachable
+  } catch (error) {
+    console.error('News search error:', error);
+    return [];
+  }
+};
